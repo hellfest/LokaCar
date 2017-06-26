@@ -4,7 +4,7 @@ package fr.eni.lokacar.modele;
  * Created by goruchon2016 on 26/06/2017.
  */
 
-public class Client extends Personne {
+public class Client {
     public int id;
     public String nom;
     public String prenom;

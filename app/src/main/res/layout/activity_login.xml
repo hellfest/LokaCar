@@ -1,9 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fr.eni.lokacar.ui.login.loginActivity">
+    android:orientation="vertical"
+    android:background="@drawable/background_color"
+    tools:context="fr.eni.lokacar.ui.login.LoginActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_small"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Bonjour. Merci de vous identifier pour  accéder à l'application Lokacar"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:gravity="right"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Identifiant: " />
+
+        <EditText
+            android:id="@+id/editTextLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
+
+        <TextView
+            android:gravity="right"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Mot de passe: " />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textPassword"
+            android:layout_marginLeft="20dp" />
+
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal"
+    >
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Se connecter"
+        android:textAllCaps="false"
+        android:onClick="onClickButtonSeConnecter"/>
+</LinearLayout>
+
+</LinearLayout>
