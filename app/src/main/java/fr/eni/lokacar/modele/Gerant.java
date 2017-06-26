@@ -7,7 +7,10 @@ package fr.eni.lokacar.modele;
 public class Gerant extends Personne {
 
     public int id;
+    public String nom;
+    public String prenom;
+    public String email;
+    public String telephone;
     public String login;
     public String password;
-    public String id_personne;
 }

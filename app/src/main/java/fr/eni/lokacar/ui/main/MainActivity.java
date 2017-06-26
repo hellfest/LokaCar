@@ -1,7 +1,9 @@
-package fr.eni.lokacar;
+package fr.eni.lokacar.ui.main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import fr.eni.lokacar.R;
 
 public class MainActivity extends AppCompatActivity {
 
