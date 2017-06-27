@@ -7,10 +7,19 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
-
+        android:text="Liste des Véhicules"
+        android:textAlignment="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    </LinearLayout>
     <ListView
         android:id="@+id/listViewVehicule"
         android:layout_width="match_parent"
