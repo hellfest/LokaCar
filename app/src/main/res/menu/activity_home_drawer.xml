@@ -3,17 +3,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/vehicule"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="Véhicules" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/location"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Locations" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/client"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Clients" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
@@ -23,13 +23,13 @@
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/chiffre_affaires"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="Chiffre d'Affaires" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/deconnexion"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Déconnexion" />
         </menu>
     </item>
 

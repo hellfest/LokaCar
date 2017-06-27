@@ -9,7 +9,7 @@ public class Modele {
     public String libelle;
     public String prix_jour;
     public String puissance;
-    public String id_categorie;
-    public String id_marque;
+    public Categorie categorie;
+    public Marque marque;
 
 }

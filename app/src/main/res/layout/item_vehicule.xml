@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_weight="0.7"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textViewVehiculeMarque"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Peugeot"/>
+
+    <TextView
+        android:id="@+id/textViewVehiculeModele"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="308"/>
+
+    <TextView
+        android:id="@+id/textViewVehiculeImmatriculation"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="BQ-160-MU"/>
+</LinearLayout>
+
+    <ImageView
+        android:layout_weight="0.3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewVehicule"
+        tools:src="@drawable/logo_small"
+        />
+
+
+</LinearLayout>

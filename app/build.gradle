@@ -29,4 +29,17 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
+    // pour récupérer et afficher les images
+    // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
+    compile group: 'com.squareup.picasso', name: 'picasso', version: '2.5.2'
+    // Pour faire des appels http
+    // https://mvnrepository.com/artifact/com.mcxiaoke.volley/library
+    compile group: 'com.mcxiaoke.volley', name: 'library', version: '1.0.19'
+    // Pour traiter format fichier Json
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
+    // Pour La fonction pull it to refresh
+    compile 'com.android.support:support-v4:25.3.1'
+    // Pour le fonction googleMap
+    compile 'com.google.android.gms:play-services-maps:7.8.0'
 }

@@ -39,7 +39,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="20dp" />
+            android:layout_marginLeft="20dp"
+            android:text="laurent"/>
 
 
     </LinearLayout>
@@ -64,7 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="textPassword"
-            android:layout_marginLeft="20dp" />
+            android:layout_marginLeft="20dp"
+            android:text="123456"/>
 
     </LinearLayout>
 <LinearLayout

@@ -7,6 +7,7 @@ package fr.eni.lokacar.modele;
 public class Agence {
 
     public int id;
+    public String nom;
     public String c_a;
     public String adresse;
     public String cp;

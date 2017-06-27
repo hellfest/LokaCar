@@ -13,4 +13,7 @@ public class Gerant {
     public String telephone;
     public String login;
     public String password;
+    public String session;
+    public String session_date;
+    public Agence agence;
 }
