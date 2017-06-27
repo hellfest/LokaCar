@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import fr.eni.lokacar.R;
@@ -42,6 +46,13 @@ import fr.eni.lokacar.utils.Preference;
 public class VehiculeFragment extends Fragment {
     ListView listViewVehicules;
     private List<Vehicule> listVehicule = new ArrayList<>();
+    //Pour saisir marque et modèle afin de filtrer la liste
+    private AutoCompleteTextView autoTextViewVehiculeMarque;
+    private AutoCompleteTextView autoTextViewVehiculeModele;
+    private Gerant gerant;
+    private List<Marque> listMarque;
+    private ArrayAdapter<Marque> adapterMarque;
+
 
     public VehiculeFragment() {
         // Required empty public constructor
@@ -54,20 +65,40 @@ public class VehiculeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vehicule, container, false);
 
         listViewVehicules = (ListView) view.findViewById(R.id.listViewVehicule);
+        autoTextViewVehiculeMarque = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeMarque);
+        autoTextViewVehiculeModele = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeModele);
 
         return view;
-
 
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        afficherVehicules();
+        gerant = Preference.getGerant(getContext());
+       afficherMarque();
+        //TODO GERER LES PARAMETRES
+        afficherVehicules(null,null);
+
+        
+        listViewVehicules.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                Intent intent = new Intent(getContext(), DetailsVehiculeActivity.class);
+
+                // envoyer l'objet Véhicule (plusieurs objets)
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("vehicule", listVehicule.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 
-    public void afficherVehicules() {
-        Gerant gerant = Preference.getGerant(getContext());
+    //Méthode permettant de récupérer la liste des véhicules
+    public void afficherVehicules(String marque, String modèle) {
+        
 
         if (gerant != null) {
 
@@ -89,8 +120,11 @@ public class VehiculeFragment extends Fragment {
 
                                 Type listType = new TypeToken<ArrayList<Vehicule>>() {
                                 }.getType();
-                                listVehicule = gson.fromJson(json, listType);
+                                listVehicule.clear();
+                                listVehicule.addAll((Collection<? extends Vehicule>) gson.fromJson(json, listType));
                                 listViewVehicules.setAdapter(new VehiculeAdapter(getContext(), R.layout.item_vehicule, listVehicule));
+
+                                //adapterMarque.notifyDataSetChanged();
                             }
 
                         }, new Response.ErrorListener() {
@@ -111,19 +145,67 @@ public class VehiculeFragment extends Fragment {
             startActivity(intent);
         }
 
-//        Vehicule v1 = new Vehicule();
-//        Modele m1 = new Modele();
-//        v1.modele = m1;
-//        Marque marque = new Marque();
-//        v1.modele.marque = marque;
-//        v1.immatriculation="rrr-123-cdd";
-//        v1.modele.libelle="1008";
-//        v1.modele.marque.libelle="Peugeot";
-//        listVehicule.add(v1);
-        // adapter de la liste
-
-
     }
 
+
+    //Méthode permettant de récupérer la liste des véhicules
+    public void afficherMarque() {
+        
+        if (gerant != null) {
+
+            //check network available or not
+            if (Network.isNetworkAvailable(getContext())) {
+
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(getContext());
+                String url = String.format(Constant.URL_LIST_MARQUE, gerant.session);
+
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            //json = parametre de reponse
+                            public void onResponse(String json) {
+
+                                Gson gson = new Gson();
+
+                                Type listType = new TypeToken<ArrayList<Marque>>() {
+                                }.getType();
+                                listMarque.clear();
+                                listMarque.addAll((Collection<? extends Marque>) gson.fromJson(json, listType));
+                                // Pour afficher la liste des marques
+                                adapterMarque = new ArrayAdapter<Marque>(getContext(),
+                                        android.R.layout.simple_dropdown_item_1line, listMarque);
+                                autoTextViewVehiculeMarque.setAdapter(adapterMarque);
+
+                                autoTextViewVehiculeMarque.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        String marqueRecuperee = listMarque.get(i).libelle;
+                                        // TODO CREER REQUËTE LISTE VEHICULE WHERE MARQUE = et WHERE MODELE =
+                                        //TO DO repasser la methode afficherVehicule
+                                    }
+                                });
+                            }
+
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(getContext(), "Erreur d'affichage de la liste des marques", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
+
+            }
+        } else {
+            Toast.makeText(getContext(), "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
+
+    }
 
 }

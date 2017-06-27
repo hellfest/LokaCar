@@ -11,14 +11,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Liste des Véhicules"
+        android:textSize="20dp"
         android:textAlignment="center"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
         >
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Marque:"/>
     <AutoCompleteTextView
+        android:id="@+id/autoTextViewVehiculeMarque"
+        android:layout_weight="4"
+        android:paddingLeft="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="saisir marque"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        >
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Modèle:"/>
+        <AutoCompleteTextView
+            android:id="@+id/autoTextViewVehiculeModele"
+            android:layout_weight="4"
+            android:paddingLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="saisir modèle"/>
     </LinearLayout>
     <ListView
         android:id="@+id/listViewVehicule"

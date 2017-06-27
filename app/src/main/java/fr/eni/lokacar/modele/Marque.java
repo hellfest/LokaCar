@@ -7,4 +7,9 @@ package fr.eni.lokacar.modele;
 public class Marque {
     public int id;
     public String libelle;
+
+    @Override
+    public String toString() {
+        return libelle;
+    }
 }
