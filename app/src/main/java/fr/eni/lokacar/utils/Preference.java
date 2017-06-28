@@ -43,7 +43,7 @@ public class Preference {
 
 
         String json = get(context).getString(PREF_GERANT, null);
-        Log.e("error",json);
+
         if (json != null) {
             Gson gson = new Gson();
             return gson.fromJson(json, Gerant.class);

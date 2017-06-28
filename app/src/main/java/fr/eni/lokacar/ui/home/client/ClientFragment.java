@@ -118,11 +118,12 @@ public class ClientFragment extends Fragment {
 
                                 Gson gson = new Gson();
 
-                                Type listType = new TypeToken<ArrayList<Client>>() {
-                                }.getType();
+                                Type listType = new TypeToken<ArrayList<Client>>(){}.getType();
+
                                 listClients = gson.fromJson(json, listType);
 
-                                adapter.notifyDataSetChanged();
+                                adapter = new ClientAdapter(getContext(), R.layout.item_client, listClients);
+                                listViewClients.setAdapter(adapter);
 
                             }
 
