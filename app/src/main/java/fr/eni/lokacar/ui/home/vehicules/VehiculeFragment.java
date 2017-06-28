@@ -1,9 +1,12 @@
 package fr.eni.lokacar.ui.home.vehicules;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +30,11 @@ import java.util.List;
 
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.VehiculeAgenceAdapter;
+import fr.eni.lokacar.modele.Client;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.Marque;
 import fr.eni.lokacar.modele.Modele;
+import fr.eni.lokacar.modele.StatusRest;
 import fr.eni.lokacar.modele.Vehicule;
 import fr.eni.lokacar.modele.VehiculesAgence;
 import fr.eni.lokacar.ui.login.LoginActivity;
@@ -92,6 +97,39 @@ public class VehiculeFragment extends Fragment {
                 bundle.putSerializable("vehicule", listVehiculeAgence.vehicules.get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
+            }
+        });
+
+        listViewVehicules.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                final Vehicule vehicule = (Vehicule) parent.getItemAtPosition(position);
+
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(getContext());
+                }
+                builder.setTitle("Supprimer un véhicule")
+                        .setMessage("Etes vous sur de vouloir supprimer ce véhicule?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                                deleteVehicule(vehicule.id);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+
+                return true;
             }
         });
     }
@@ -175,5 +213,62 @@ public class VehiculeFragment extends Fragment {
         }
 
     }
+
+    /**
+     *Méthode de suppression d'un véhicule
+     */
+    public void deleteVehicule(int id) {
+        Gerant gerant = Preference.getGerant(getContext());
+
+        if (gerant != null) {
+
+            //check network available or not
+            if (Network.isNetworkAvailable(getContext())) {
+
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(getContext());
+
+                String url = String.format(Constant.URL_DELETE_VEHICULE, id, gerant.session);
+
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            //json = parametre de reponse
+                            public void onResponse(String json) {
+
+                                Gson gson = new Gson();
+
+                                StatusRest status = gson.fromJson(json, StatusRest.class);
+
+                                if (status.status){
+                                    afficherVehicules();
+                                }
+
+                                Toast.makeText(getContext(), status.message, Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(getContext(), "Erreur d'accès au serveur", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
+
+            }
+        } else {
+            Toast.makeText(getContext(), "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
+
+    }
+
 
 }

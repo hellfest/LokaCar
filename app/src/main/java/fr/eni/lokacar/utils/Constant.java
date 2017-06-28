@@ -10,10 +10,19 @@ public class Constant {
     // --------------Requêtes VEHICULES------------------
     public static final String URL_LIST_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/all/%s";
 
+    //--------------Requête de suppression d'un vehicule ----------------
+    public static final String URL_DELETE_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/delete/%s/%s";
+
+    //-------------Requeste de récupération d'un vehicule ------------
+    public static final String URL_GET_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/%s/%s";
+
+    //-------------Requeste de mise à jour du client
+    public static final String URL_UPDATE_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/update/%s";
+
     //--------------Requêtes Marques------------------
     public static final String URL_LIST_MARQUE = "http://10.1.139.21:8383/slim/vehicule/marque/all/%s";
 
-    //--------------Requêtes Marques------------------
+    //--------------Requêtes Modeles------------------
     public static final String URL_LIST_MODELE = "http://10.1.139.21:8383/slim/vehicule/modele/all/%s";
 
     //--------------Requête liste des clients recherche ----------------
@@ -22,13 +31,13 @@ public class Constant {
     //--------------Requête liste des clients recherche ----------------
     public static final String URL_LIST_SEARCH_CLIENTS= "http://10.1.139.21:8383/slim/client/liste/%s/%s";
 
-    //--------------Requête liste des clients recherche ----------------
+    //--------------Requête de suppression du client ----------------
     public static final String URL_DELETE_CLIENT = "http://10.1.139.21:8383/slim/client/delete/%s/%s";
 
-    //-------------Requeste de suppression du client
+    //-------------Requeste de récupération du client ------------
     public static final String URL_GET_CLIENT = "http://10.1.139.21:8383/slim/client/%s/%s";
 
-    //-------------Requeste de suppression du client
+    //-------------Requeste de mise à jour du client
     public static final String URL_UPDATE_CLIENT = "http://10.1.139.21:8383/slim/client/update/%s";
 
 

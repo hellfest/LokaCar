@@ -8,18 +8,19 @@ import android.view.MenuItem;
 import fr.eni.lokacar.AppActivity;
 import fr.eni.lokacar.R;
 
-public class DetailsVehiculeActivity extends AppActivity {
+public class AddVehiculeActivity extends AppActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details_vehicule);
+        setContentView(R.layout.activity_add_vehicule);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_vehicule_update, menu);
+        getMenuInflater().inflate(R.menu.menu_vehicule_add, menu);
         return true;
     }
 
@@ -35,7 +36,7 @@ public class DetailsVehiculeActivity extends AppActivity {
             return true;
         }
 
-        if (id == R.id.action_vehicule_update) {
+        if (id == R.id.action_vehicule_add) {
 
             return true;
         }
