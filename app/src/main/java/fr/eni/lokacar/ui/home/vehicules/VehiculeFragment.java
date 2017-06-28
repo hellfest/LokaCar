@@ -51,7 +51,6 @@ public class VehiculeFragment extends Fragment {
     private ArrayAdapter<Marque> adapterMarque;
     private List<Modele> listModele= new ArrayList<>();
     private ArrayAdapter<Modele> adapterModele;
-    private String libelleMarque;
     private VehiculesAgence listVehiculeAgence;
     private VehiculeAgenceAdapter vehiculeAgenceAdapter;
 
@@ -67,7 +66,7 @@ public class VehiculeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vehicule, container, false);
 
         listViewVehicules = (ListView) view.findViewById(R.id.listViewVehicule);
-        autoTextViewVehiculeMarque = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeMarque);
+
         autoTextViewVehiculeModele = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeModele);
 
         return view;

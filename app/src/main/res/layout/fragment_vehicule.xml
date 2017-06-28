@@ -14,25 +14,7 @@
         android:text="Liste des Véhicules"
         android:textSize="20dp"
         android:textAlignment="center"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        >
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Marque:"/>
-    <AutoCompleteTextView
-        android:id="@+id/autoTextViewVehiculeMarque"
-        android:layout_weight="4"
-        android:paddingLeft="10dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="saisir marque"/>
-    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,6 +58,7 @@
         android:layout_alignParentBottom="true"
         app:backgroundTint="@color/grey"
         android:tint="@color/white"
+        android:onClick="onClickButtonAjouterVehicule"
         />
 
 </RelativeLayout>

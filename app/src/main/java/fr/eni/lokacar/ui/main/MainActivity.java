@@ -9,6 +9,7 @@ import java.util.TimerTask;
 
 import fr.eni.lokacar.AppActivity;
 import fr.eni.lokacar.R;
+import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.ui.home.HomeActivity;
 import fr.eni.lokacar.ui.login.LoginActivity;
 import fr.eni.lokacar.utils.Preference;
@@ -26,6 +27,8 @@ public class MainActivity extends AppActivity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+
+                Gerant gerant1 = Preference.getGerant(MainActivity.this);
 
                 if (Preference.getGerant(MainActivity.this) != null){
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);

@@ -41,6 +41,9 @@ public class HomeActivity extends AppActivity
     private Gerant gerant;
     private List<Vehicule> vehiculeList = new ArrayList<>();
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,10 @@ public class HomeActivity extends AppActivity
         // Pour afficher des infos du gérant dans l'entête de la navigation view
         textViewGerant.setText(gerant.nom.toUpperCase() + " " + gerant.prenom.substring(0, 1).toUpperCase() + gerant.prenom.substring(1));
         textViewEmail.setText(gerant.email);
+
+        HomeFragment homeFragment = new HomeFragment();
+        switchFragment(homeFragment);
+
 
     }
 
@@ -118,8 +125,8 @@ public class HomeActivity extends AppActivity
         if (id == R.id.location) {
 
         } else if (id == R.id.vehicule) {
-            VehiculeFragment vehiculeFragment = new VehiculeFragment();
-            switchFragment(vehiculeFragment);
+            VehiculeFilterFragment vehiculeFilterFragment = new VehiculeFilterFragment();
+            switchFragment(vehiculeFilterFragment);
 
         } else if (id == R.id.client) {
             switchFragment(new ClientFragment());
