@@ -114,7 +114,7 @@ public class VehiculeAdapter extends ArrayAdapter<Vehicule> implements Filterabl
 
             for (int i = 0; i < count; i++) {
                 filterableVehicule = list.get(i);
-                if (filterableVehicule.modele.marque.toString().toLowerCase().contains(filterString)) {
+                if (filterableVehicule.modele.toString().toLowerCase().contains(filterString)) {
                     nlist.add(filterableVehicule);
                 }
             }

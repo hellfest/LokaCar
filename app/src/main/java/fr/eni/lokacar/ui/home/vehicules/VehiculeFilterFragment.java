@@ -33,6 +33,7 @@ import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.VehiculeAdapter;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.Marque;
+import fr.eni.lokacar.modele.Modele;
 import fr.eni.lokacar.modele.Vehicule;
 import fr.eni.lokacar.ui.login.LoginActivity;
 import fr.eni.lokacar.utils.Constant;
@@ -49,9 +50,8 @@ public class VehiculeFilterFragment extends Fragment {
 
     private Gerant gerant;
 
-    private List<Marque> listMarque= new ArrayList<>();
-    private ArrayAdapter<Marque> adapterMarque;
-    private String libelleMarque;
+    private List<Modele> listModele = new ArrayList<>();
+    private ArrayAdapter<Modele> adapterModele;
     private List<Vehicule> listVehicule = new ArrayList<>();
     private VehiculeAdapter adapterVehicule;
 
@@ -67,7 +67,7 @@ public class VehiculeFilterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vehicule, container, false);
 
         listViewVehicules = (ListView) view.findViewById(R.id.listViewVehicule);
-        autoTextViewVehiculeMarque = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeMarque);
+       // autoTextViewVehiculeMarque = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeMarque);
         autoTextViewVehiculeModele = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeModele);
 
         return view;
@@ -80,9 +80,7 @@ public class VehiculeFilterFragment extends Fragment {
         gerant = Preference.getGerant(getContext());
 
         afficherVehicules();
-        afficherMarque();
-        //TODO GERER LES PARAMETRES
-       // afficherVehicules(null,null);
+        afficherModele();
 
         
         listViewVehicules.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -152,7 +150,7 @@ public class VehiculeFilterFragment extends Fragment {
     }
 
     //Méthode permettant de récupérer la liste des véhicules
-    public void afficherMarque() {
+    public void afficherModele() {
         
         if (gerant != null) {
 
@@ -161,7 +159,7 @@ public class VehiculeFilterFragment extends Fragment {
 
                 // Instantiate the RequestQueue.
                 RequestQueue queue = Volley.newRequestQueue(getContext());
-                String url = String.format(Constant.URL_LIST_MARQUE, gerant.session);
+                String url = String.format(Constant.URL_LIST_MODELE, gerant.session);
 
                 // Request a string response from the provided URL.
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -174,23 +172,22 @@ public class VehiculeFilterFragment extends Fragment {
 
                                 Type listType = new TypeToken<ArrayList<Marque>>() {
                                 }.getType();
-                                listMarque.clear();
-                                listMarque.addAll((Collection<? extends Marque>) gson.fromJson(json, listType));
+                                listModele.clear();
+                                listModele.addAll((Collection<? extends Modele>) gson.fromJson(json, listType));
                                 // Pour afficher la liste des marques
-                                adapterMarque = new ArrayAdapter<Marque>(getContext(),
-                                        android.R.layout.simple_dropdown_item_1line, listMarque);
-                                autoTextViewVehiculeMarque.setAdapter(adapterMarque);
+                                adapterModele = new ArrayAdapter<Modele>(getContext(),
+                                        android.R.layout.simple_dropdown_item_1line, listModele);
+                                autoTextViewVehiculeModele.setAdapter(adapterModele);
 
-                                autoTextViewVehiculeMarque.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                autoTextViewVehiculeModele.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                                         Log.e(TAG, "view: "+((TextView) view).getText().toString());
 
-                                        adapterVehicule.getFilter().filter(((TextView) view).getText().toString());
-                                        // TODO CREER REQUËTE LISTE VEHICULE WHERE MARQUE = et WHERE MODELE =
-                                        //TO DO repasser la methode afficherVehicule
                                         //afficherVehicules(libelleMarque);
+                                        adapterVehicule.getFilter().filter(((TextView) view).getText().toString());
+
                                     }
                                 });
                             }

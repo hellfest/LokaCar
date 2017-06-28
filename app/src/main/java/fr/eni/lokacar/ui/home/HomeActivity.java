@@ -28,6 +28,7 @@ import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.VehiculeAdapter;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.Vehicule;
+import fr.eni.lokacar.ui.home.vehicules.VehiculeFilterFragment;
 import fr.eni.lokacar.ui.home.vehicules.VehiculeFragment;
 import fr.eni.lokacar.ui.main.MainActivity;
 import fr.eni.lokacar.utils.Preference;
@@ -115,8 +116,8 @@ public class HomeActivity extends AppActivity
         if (id == R.id.location) {
 
         } else if (id == R.id.vehicule) {
-            VehiculeFragment vehiculeFragment = new VehiculeFragment();
-            switchFragment(vehiculeFragment);
+            VehiculeFilterFragment vehiculeFilterFragment = new VehiculeFilterFragment();
+            switchFragment(vehiculeFilterFragment);
 
         } else if (id == R.id.client) {
 
