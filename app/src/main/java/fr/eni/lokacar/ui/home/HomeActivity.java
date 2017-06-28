@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,6 +29,7 @@ import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.VehiculeAdapter;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.Vehicule;
+import fr.eni.lokacar.ui.home.client.ClientFragment;
 import fr.eni.lokacar.ui.home.vehicules.VehiculeFilterFragment;
 import fr.eni.lokacar.ui.home.vehicules.VehiculeFragment;
 import fr.eni.lokacar.ui.main.MainActivity;
@@ -116,11 +118,11 @@ public class HomeActivity extends AppActivity
         if (id == R.id.location) {
 
         } else if (id == R.id.vehicule) {
-            VehiculeFilterFragment vehiculeFilterFragment = new VehiculeFilterFragment();
-            switchFragment(vehiculeFilterFragment);
+            VehiculeFragment vehiculeFragment = new VehiculeFragment();
+            switchFragment(vehiculeFragment);
 
         } else if (id == R.id.client) {
-
+            switchFragment(new ClientFragment());
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.chiffre_affaires) {
