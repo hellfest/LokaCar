@@ -13,4 +13,6 @@ public class Client {
     public String adresse;
     public String cp;
     public String ville;
+    public String numero_permis;
+    public boolean archive;
 }
