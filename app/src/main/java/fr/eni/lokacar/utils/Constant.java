@@ -16,4 +16,6 @@ public class Constant {
     //--------------Requêtes Marques------------------
     public static final String URL_LIST_MODELE = "http://10.1.139.21:8383/slim/vehicule/modele/all/%s";
 
+    public static final String URL_LIST_VEHICULE_AGENCE = "http://10.1.139.21:8383/slim/vehicule/liste/all/%s";
+
 }
