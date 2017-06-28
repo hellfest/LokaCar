@@ -96,8 +96,6 @@ public class ClientFragment extends Fragment {
 
                 final Client client = (Client) parent.getItemAtPosition(position);
 
-                Toast.makeText(getContext(),client.nom,Toast.LENGTH_SHORT).show();
-
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);

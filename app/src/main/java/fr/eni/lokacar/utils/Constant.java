@@ -25,6 +25,11 @@ public class Constant {
     //--------------Requête liste des clients recherche ----------------
     public static final String URL_DELETE_CLIENT = "http://10.1.139.21:8383/slim/client/delete/%s/%s";
 
+    //-------------Requeste de suppression du client
     public static final String URL_GET_CLIENT = "http://10.1.139.21:8383/slim/client/%s/%s";
+
+    //-------------Requeste de suppression du client
+    public static final String URL_UPDATE_CLIENT = "http://10.1.139.21:8383/slim/client/update/%s";
+
 
 }

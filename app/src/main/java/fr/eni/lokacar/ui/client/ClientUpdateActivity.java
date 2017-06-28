@@ -30,10 +30,12 @@ import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.ClientAdapter;
 import fr.eni.lokacar.modele.Client;
 import fr.eni.lokacar.modele.Gerant;
+import fr.eni.lokacar.modele.StatusRest;
 import fr.eni.lokacar.ui.login.LoginActivity;
 import fr.eni.lokacar.utils.Constant;
 import fr.eni.lokacar.utils.Network;
 import fr.eni.lokacar.utils.Preference;
+import fr.eni.lokacar.utils.Utils;
 
 public class ClientUpdateActivity extends AppActivity {
 
@@ -157,7 +159,7 @@ public class ClientUpdateActivity extends AppActivity {
         }
 
         if (id == R.id.action_clientUpdate) {
-
+            updateClient();
             return true;
         }
 
@@ -176,6 +178,117 @@ public class ClientUpdateActivity extends AppActivity {
             editTextCp.setText(client.cp);
             editTextVille.setText(client.ville);
         }
+    }
+
+    /**
+     *
+     */
+    private void updateClient(){
+
+        final String nom =  editTextNom.getText().toString();
+        final String prenom =  editTextPrenom.getText().toString();
+        final String permis =  editTextNumPermis.getText().toString();
+        final String email =  editTextEmail.getText().toString();
+        final String telephone =  editTextTelephone.getText().toString();
+        final String adresse =  editTextAdresse.getText().toString();
+        final String cp =  editTextCp.getText().toString();
+        final String ville =  editTextVille.getText().toString();
+
+        boolean error = false;
+
+        if (nom== null || nom.isEmpty()){
+            editTextNom.setError("Le nom est obligatoire");
+            error = true;
+        }
+
+        if (prenom == null || prenom.isEmpty()){
+            editTextPrenom.setError("Le prénom est obligatoire");
+            error = true;
+        }
+
+        if (permis == null || permis.isEmpty()){
+            editTextNumPermis.setError("Le numéro de permis est obligatoire");
+            error = true;
+        }
+
+        if (email == null || email.isEmpty() ){
+            editTextEmail.setError("L'email est obligatoire");
+            error = true;
+        }
+        else if (!Utils.isEmailValid(email)){
+            editTextNom.setError("L'email est mal formé");
+            error = true;
+        }
+
+        if (telephone == null || telephone.isEmpty()){
+            editTextTelephone.setError("Le téléphone de permis est obligatoire");
+            error = true;
+        }
+
+        if (!error){
+            Gerant gerant = Preference.getGerant(ClientUpdateActivity.this);
+
+            if (gerant != null) {
+
+                //check network available or not
+                if (Network.isNetworkAvailable(ClientUpdateActivity.this)) {
+
+                    // Instantiate the RequestQueue.
+                    RequestQueue queue = Volley.newRequestQueue(ClientUpdateActivity.this);
+
+                    String url = String.format(Constant.URL_UPDATE_CLIENT, gerant.session);
+
+                    // Request a string response from the provided URL.
+                    StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
+                            new Response.Listener<String>() {
+                                @Override
+                                //json = parametre de reponse
+                                public void onResponse(String json) {
+                                    Gson gson = new Gson();
+                                    StatusRest status = gson.fromJson(json, StatusRest.class);
+
+                                    if (status.status) {
+                                        setResult(RESULT_OK, null);
+                                    }
+
+                                }
+
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                            Toast.makeText(ClientUpdateActivity.this, "Erreur de la mise à jour du client", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                            params.put("id", String.valueOf(client.id));
+                            params.put("nom", nom);
+                            params.put("prenom", prenom);
+                            params.put("permis", permis);
+                            params.put("email", email);
+                            params.put("telephone", telephone);
+                            params.put("adresse", adresse);
+                            params.put("cp", cp);
+                            params.put("ville", ville);
+                            return params;
+                        }
+                    };
+
+                    // Add the request to the RequestQueue.
+                    queue.add(stringRequest);
+
+                }
+            } else {
+                Toast.makeText(ClientUpdateActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ClientUpdateActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+
+        }
+
     }
 
 }
