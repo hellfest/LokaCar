@@ -1,10 +1,12 @@
 package fr.eni.lokacar.modele;
 
+import java.io.Serializable;
+
 /**
  * Created by goruchon2016 on 26/06/2017.
  */
 
-public class Categorie {
+public class Categorie implements Serializable{
 
     public int id;
     public String libelle;

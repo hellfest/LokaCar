@@ -2,23 +2,35 @@ package fr.eni.lokacar.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.lokacar.AppActivity;
 import fr.eni.lokacar.R;
+import fr.eni.lokacar.adpater.VehiculeAdapter;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.Vehicule;
 import fr.eni.lokacar.ui.home.client.ClientFragment;
+import fr.eni.lokacar.ui.home.vehicules.VehiculeFilterFragment;
 import fr.eni.lokacar.ui.home.vehicules.VehiculeFragment;
 import fr.eni.lokacar.ui.main.MainActivity;
 import fr.eni.lokacar.utils.Preference;
