@@ -23,6 +23,8 @@ public class Constant {
     public static final String URL_LIST_SEARCH_CLIENTS= "http://10.1.139.21:8383/slim/client/liste/%s/%s";
 
     //--------------Requête liste des clients recherche ----------------
-    public static final String URL_DELETE_CLIENT= "http://10.1.139.21:8383/slim/client/delete/%s/%s";
+    public static final String URL_DELETE_CLIENT = "http://10.1.139.21:8383/slim/client/delete/%s/%s";
+
+    public static final String URL_GET_CLIENT = "http://10.1.139.21:8383/slim/client/%s/%s";
 
 }

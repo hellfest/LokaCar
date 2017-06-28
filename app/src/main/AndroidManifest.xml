@@ -27,7 +27,8 @@
             android:name=".ui.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.home.vehicules.DetailsVehiculeActivity"></activity>
+        <activity android:name=".ui.home.vehicules.DetailsVehiculeActivity" />
+        <activity android:name=".ui.client.ClientUpdateActivity"></activity>
     </application>
 
 </manifest>

@@ -36,14 +36,18 @@ import fr.eni.lokacar.adpater.ClientAdapter;
 import fr.eni.lokacar.modele.Client;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.StatusRest;
+import fr.eni.lokacar.ui.client.ClientUpdateActivity;
 import fr.eni.lokacar.ui.login.LoginActivity;
 import fr.eni.lokacar.utils.Constant;
 import fr.eni.lokacar.utils.Network;
 import fr.eni.lokacar.utils.Preference;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class ClientFragment extends Fragment {
 
+    private static final int REQUEST_CODE = 200;
     private List<Client> listClients = new ArrayList<>();
     ListView listViewClients;
     EditText editTextClient;
@@ -121,8 +125,32 @@ public class ClientFragment extends Fragment {
             }
         });
 
+
+        listViewClients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Client client = (Client) parent.getItemAtPosition(position);
+
+                Intent intent = new Intent(getContext(), ClientUpdateActivity.class);
+                intent.putExtra("client", client.id);
+
+                startActivityForResult(intent,REQUEST_CODE);
+            }
+        });
+
         return view;
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                afficherClients();
+            }
+        }
     }
 
     @Override

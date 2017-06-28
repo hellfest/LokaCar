@@ -25,19 +25,6 @@ public class Preference {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-//    // Methode pour afficher la ville
-//    public static String getCity(Context context) {
-//        return get(context).getString(PREF_CITY, "");
-//    }
-//
-//    // Methode pour enregistrer la ville
-//    public static void setCity(Context context, String city) {
-//        get(context)
-//                .edit()
-//                .putString(PREF_CITY, city)
-//                .commit();
-//    }
-
     //Récupéréation de tout l'objet enregistré en JSON
     public static Gerant getGerant(Context context) {
 
