@@ -31,6 +31,7 @@ import java.util.List;
 
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.ClientAdapter;
+import fr.eni.lokacar.adpater.VehiculeLocationAdapter;
 import fr.eni.lokacar.modele.Categorie;
 import fr.eni.lokacar.modele.Client;
 import fr.eni.lokacar.modele.Gerant;
@@ -49,9 +50,10 @@ public class LocationFragment extends Fragment {
     private ListView listViewLocationVehicule;
     private ArrayAdapter<Categorie> adapterCategorie;
     private ArrayAdapter<Modele> adapterModele;
-    List<Categorie> listeCategorie = new ArrayList<Categorie>();
-    List<Modele> listeModele = new ArrayList<Modele>();
-    List<Vehicule> listeVehicule = new ArrayList<Vehicule>();
+    private List<Categorie> listeCategorie = new ArrayList<Categorie>();
+    private List<Modele> listeModele = new ArrayList<Modele>();
+    private List<Vehicule> listeVehicule = new ArrayList<Vehicule>();
+    private VehiculeLocationAdapter adapterVehicule;
     private Gerant gerant;
 
 
@@ -78,7 +80,9 @@ public class LocationFragment extends Fragment {
 
         adapterCategorie = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,listeCategorie);
         adapterModele = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,listeModele);
+        adapterVehicule = new VehiculeLocationAdapter(getContext(),R.layout.item_vehicule_location,listeVehicule);
 
+        listViewLocationVehicule.setAdapter(adapterVehicule);
         spinnerCategorie.setAdapter(adapterCategorie);
 
         spinnerCategorie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -116,9 +120,11 @@ public class LocationFragment extends Fragment {
 
                 if (modele.id > 0){
                     //TODO : charger le liste
+                    chargeVehicule(modele.id);
                 }
                 else{
                     listeVehicule.clear();
+                    adapterVehicule.notifyDataSetChanged();
                 }
             }
 
@@ -263,6 +269,54 @@ public class LocationFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
 
                         Toast.makeText(getContext(), R.string.location_error_liste_modele, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
+
+            }
+        } else {
+            Toast.makeText(getContext(), R.string.error_connexion_gerant, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
+    }
+
+
+    protected void chargeVehicule(int id){
+        if (gerant != null) {
+
+            //check network available or not
+            if (Network.isNetworkAvailable(getContext())) {
+
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(getContext());
+
+                String url = String.format(Constant.URL_LIST_LOCATION_VEHICULE, id,gerant.session);
+
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            //json = parametre de reponse
+                            public void onResponse(String json) {
+
+                                Gson gson = new Gson();
+
+                                Type listType = new TypeToken<ArrayList<Vehicule>>(){}.getType();
+
+                                listeVehicule = gson.fromJson(json, listType);
+
+                                adapterVehicule.notifyDataSetChanged();
+
+                            }
+
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(getContext(), R.string.location_error_liste_vehicule, Toast.LENGTH_SHORT).show();
 
                     }
                 });
