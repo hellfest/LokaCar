@@ -28,9 +28,9 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.home.vehicules.DetailsVehiculeActivity" />
-        <activity android:name=".ui.client.ClientUpdateActivity"></activity>
+        <activity android:name=".ui.home.client.ClientUpdateActivity"></activity>
         <activity android:name=".ui.home.vehicules.AddVehiculeActivity"></activity>
-        <activity android:name=".ui.client.ClientAddActivity"></activity>
+        <activity android:name=".ui.home.client.ClientAddActivity"></activity>
     </application>
 
 </manifest>

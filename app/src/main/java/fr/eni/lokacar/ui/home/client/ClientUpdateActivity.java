@@ -1,7 +1,6 @@
-package fr.eni.lokacar.ui.client;
+package fr.eni.lokacar.ui.home.client;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +31,7 @@ import fr.eni.lokacar.utils.Network;
 import fr.eni.lokacar.utils.Preference;
 import fr.eni.lokacar.utils.Utils;
 
-public class ClientAddActivity extends AppActivity {
+public class ClientUpdateActivity extends AppActivity {
 
     private TextView textViewTitre;
     private EditText editTextNom;
@@ -43,6 +42,8 @@ public class ClientAddActivity extends AppActivity {
     private EditText editTextAdresse;
     private EditText editTextCp;
     private EditText editTextVille;
+    private Client client;
+    private int id;
 
 
 
@@ -61,15 +62,81 @@ public class ClientAddActivity extends AppActivity {
         editTextCp = (EditText) findViewById(R.id.editTextCp);
         editTextVille = (EditText) findViewById(R.id.editTextVille);
 
-        textViewTitre.setText("Ajouter d'un client");
+        textViewTitre.setText("Modification d'un client");
+
+        id = getIntent().getIntExtra("client", -1);
+
+        client = null;
+
+        getClient();
 
     }
 
 
+    /**
+     *
+     */
+    public void getClient() {
+        Gerant gerant = Preference.getGerant(ClientUpdateActivity.this);
+
+        if (gerant != null) {
+
+            //check network available or not
+            if (Network.isNetworkAvailable(ClientUpdateActivity.this)) {
+
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(ClientUpdateActivity.this);
+
+                String url = String.format(Constant.URL_GET_CLIENT, id, gerant.session);
+
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            //json = parametre de reponse
+                            public void onResponse(String json) {
+                                Gson gson = new Gson();
+                                client = gson.fromJson(json, Client.class);
+                                afficheClient();
+                            }
+
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(ClientUpdateActivity.this, "Erreur de récupération du client", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                /*
+                {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("id_marque", "500");
+                        params.put("immat", "500");
+                        params.put("id_marque", "500");
+                        params.put("id_marque", "500");
+                        return params;
+                    }
+                };*/
+
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
+
+            }
+        } else {
+            Toast.makeText(ClientUpdateActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ClientUpdateActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_client_add, menu);
+        getMenuInflater().inflate(R.menu.menu_client_update, menu);
         return true;
     }
 
@@ -85,18 +152,32 @@ public class ClientAddActivity extends AppActivity {
             return true;
         }
 
-        if (id == R.id.action_clientAdd) {
-            addClient();
+        if (id == R.id.action_clientUpdate) {
+            updateClient();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void afficheClient(){
+        if (client != null){
+            editTextNom.setText(client.nom);
+            editTextPrenom.setText(client.prenom);
+            editTextNumPermis.setText(client.numero_permis);
+            editTextEmail.setText(client.email);
+            editTextTelephone.setText(client.telephone);
+            editTextAdresse.setText(client.adresse);
+            editTextCp.setText(client.cp);
+            editTextVille.setText(client.ville);
+        }
+    }
+
     /**
      *
      */
-    private void addClient(){
+    private void updateClient(){
 
         final String nom =  editTextNom.getText().toString();
         final String prenom =  editTextPrenom.getText().toString();
@@ -139,15 +220,15 @@ public class ClientAddActivity extends AppActivity {
         }
 
         if (!error){
-            Gerant gerant = Preference.getGerant(ClientAddActivity.this);
+            Gerant gerant = Preference.getGerant(ClientUpdateActivity.this);
 
             if (gerant != null) {
 
                 //check network available or not
-                if (Network.isNetworkAvailable(ClientAddActivity.this)) {
+                if (Network.isNetworkAvailable(ClientUpdateActivity.this)) {
 
                     // Instantiate the RequestQueue.
-                    RequestQueue queue = Volley.newRequestQueue(ClientAddActivity.this);
+                    RequestQueue queue = Volley.newRequestQueue(ClientUpdateActivity.this);
 
                     String url = String.format(Constant.URL_UPDATE_CLIENT, gerant.session);
 
@@ -161,10 +242,9 @@ public class ClientAddActivity extends AppActivity {
                                     StatusRest status = gson.fromJson(json, StatusRest.class);
                                     if (status.status) {
                                         setResult(RESULT_OK, null);
-                                        onBackPressed();
                                     }
 
-                                    Toast.makeText(ClientAddActivity.this, status.message, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ClientUpdateActivity.this, status.message, Toast.LENGTH_SHORT).show();
 
                                 }
 
@@ -172,14 +252,14 @@ public class ClientAddActivity extends AppActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
-                            Toast.makeText(ClientAddActivity.this, "Erreur de l'ajout du client", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ClientUpdateActivity.this, "Erreur de la mise à jour du client", Toast.LENGTH_SHORT).show();
 
                         }
                     }){
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<String, String>();
-
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                            params.put("id", String.valueOf(client.id));
                             params.put("nom", nom);
                             params.put("prenom", prenom);
                             params.put("permis", permis);
@@ -197,12 +277,13 @@ public class ClientAddActivity extends AppActivity {
 
                 }
             } else {
-                Toast.makeText(ClientAddActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ClientAddActivity.this, LoginActivity.class);
+                Toast.makeText(ClientUpdateActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ClientUpdateActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
 
         }
 
     }
+
 }
