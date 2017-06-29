@@ -85,7 +85,8 @@ public class VehiculeFragment extends Fragment {
 
         afficherVehicules();
 
-        
+        getActivity().setTitle("Gestion des véhicules");
+
         listViewVehicules.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

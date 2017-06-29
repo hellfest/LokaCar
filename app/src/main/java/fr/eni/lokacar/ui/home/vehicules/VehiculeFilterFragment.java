@@ -88,6 +88,8 @@ public class VehiculeFilterFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         gerant = Preference.getGerant(getContext());
 
+        getActivity().setTitle("Gestion des véhicules");
+
         afficherVehicules();
         afficherModele();
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import fr.eni.lokacar.adpater.VehiculeLocationAdapter;
 import fr.eni.lokacar.modele.Categorie;
 import fr.eni.lokacar.modele.Client;
 import fr.eni.lokacar.modele.Gerant;
+import fr.eni.lokacar.modele.Marque;
 import fr.eni.lokacar.modele.Modele;
 import fr.eni.lokacar.modele.Vehicule;
 import fr.eni.lokacar.ui.login.LoginActivity;
@@ -69,6 +71,8 @@ public class LocationFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_location, container, false);
 
+
+
         gerant = Preference.getGerant(getContext());
 
         spinnerCategorie = (Spinner) view.findViewById(R.id.spinnerCategorie);
@@ -98,6 +102,7 @@ public class LocationFragment extends Fragment {
                     spinnerModele.setEnabled(false);
                     getListModeles(null);
                     adapterModele.notifyDataSetChanged();
+                    spinnerModele.setSelected(false);
                 }
 
             }
@@ -107,6 +112,8 @@ public class LocationFragment extends Fragment {
                 spinnerModele.setEnabled(false);
                 getListModeles(null);
                 adapterModele.notifyDataSetChanged();
+                spinnerModele.setSelected(false);
+                //spinnerModele.setSelection(-1);
             }
         });
 
@@ -305,8 +312,8 @@ public class LocationFragment extends Fragment {
                                 Gson gson = new Gson();
 
                                 Type listType = new TypeToken<ArrayList<Vehicule>>(){}.getType();
-
-                                listeVehicule = gson.fromJson(json, listType);
+                                listeVehicule.clear();
+                                listeVehicule.addAll((Collection<? extends Vehicule>) gson.fromJson(json, listType));
 
                                 adapterVehicule.notifyDataSetChanged();
 
@@ -331,4 +338,9 @@ public class LocationFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActivity().setTitle("Location véhicule");
+    }
 }

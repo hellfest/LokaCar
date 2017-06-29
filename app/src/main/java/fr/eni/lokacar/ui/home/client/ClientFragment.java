@@ -168,6 +168,10 @@ public class ClientFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         adapter = new ClientAdapter(getContext(), R.layout.item_client, listClients);
         listViewClients.setAdapter(adapter);
+
+
+        getActivity().setTitle("Gestion des clients");
+
     }
 
     /**
