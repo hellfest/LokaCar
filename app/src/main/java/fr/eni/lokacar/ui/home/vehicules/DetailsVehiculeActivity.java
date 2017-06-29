@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import fr.eni.lokacar.AppActivity;
 import fr.eni.lokacar.R;
@@ -41,5 +42,8 @@ public class DetailsVehiculeActivity extends AppActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onClickBoutonValiderVehicule(View view) {
     }
 }

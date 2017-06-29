@@ -19,11 +19,17 @@ public class Constant {
     //-------------Requeste de mise à jour du client
     public static final String URL_UPDATE_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/update/%s";
 
+    //--------------Requête de creation d'un vehicule ----------------
+    public static final String URL_ADD_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/add/%s" ;
+
     //--------------Requêtes Marques------------------
     public static final String URL_LIST_MARQUE = "http://10.1.139.21:8383/slim/vehicule/marque/all/%s";
 
     //--------------Requêtes Modeles------------------
     public static final String URL_LIST_MODELE = "http://10.1.139.21:8383/slim/vehicule/modele/all/%s";
+
+    //--------------Requêtes Modeles par marque------------------
+    public static final String URL_LIST_MARQUE_MODELES = "http://10.1.139.21:8383/slim/vehicule/marque/modele/%s/%s";
 
     //--------------Requête liste des clients recherche ----------------
     public static final String URL_LIST_VEHICULE_AGENCE= "http://10.1.139.21:8383/slim/vehicule/liste/all/%s";
@@ -48,6 +54,7 @@ public class Constant {
 
     //--------------Request de liste des catégories-----------
     public static final String URL_LIST_MODELES_CATEGORIE = "http://10.1.139.21:8383/slim/vehicule/categorie/modele/%s/%s";
+
 
 
 }
