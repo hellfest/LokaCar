@@ -41,6 +41,7 @@
         <EditText
             android:id="@+id/editTextNom"
             android:layout_width="0dp"
+            android:maxLines="1"
             android:layout_weight="0.70"
             android:layout_height="wrap_content" />
 
@@ -63,6 +64,7 @@
         <EditText
             android:id="@+id/editTextPrenom"
             android:layout_width="0dp"
+            android:maxLines="1"
             android:layout_weight="0.70"
             android:layout_height="wrap_content" />
 
@@ -85,6 +87,7 @@
         <EditText
             android:id="@+id/editTextNumPermis"
             android:layout_width="0dp"
+            android:maxLines="1"
             android:layout_weight="0.70"
             android:layout_height="wrap_content" />
 
@@ -109,6 +112,8 @@
             android:id="@+id/editTextEmail"
             android:layout_width="0dp"
             android:layout_weight="0.70"
+            android:maxLines="1"
+            android:inputType="textEmailAddress"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -131,6 +136,8 @@
             android:id="@+id/editTextTelephone"
             android:layout_width="0dp"
             android:layout_weight="0.70"
+            android:maxLines="1"
+            android:inputType="number"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -153,6 +160,7 @@
             android:id="@+id/editTextAdresse"
             android:layout_width="0dp"
             android:layout_weight="0.70"
+            android:maxLines="1"
             android:layout_height="wrap_content"
            />
 
@@ -170,12 +178,14 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="10dp"
-            android:text="Adresse :"/>
+            android:text="Code postal :"/>
 
         <EditText
             android:id="@+id/editTextCp"
             android:layout_width="0dp"
             android:layout_weight="0.70"
+            android:maxLines="1"
+            android:inputType="number"
             android:layout_height="wrap_content"
             android:maxLength="5" />
 
@@ -198,6 +208,7 @@
         <EditText
             android:id="@+id/editTextVille"
             android:layout_width="0dp"
+            android:maxLines="1"
             android:layout_weight="0.70"
             android:layout_height="wrap_content"
              />

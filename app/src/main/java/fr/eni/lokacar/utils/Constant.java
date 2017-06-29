@@ -40,5 +40,6 @@ public class Constant {
     //-------------Requeste de mise à jour du client
     public static final String URL_UPDATE_CLIENT = "http://10.1.139.21:8383/slim/client/update/%s";
 
-
+    //-------------Requeste d'ajout du client
+    public static final String URL_INSERT_CLIENT = "http://10.1.139.21:8383/slim/client/insert/%s";
 }

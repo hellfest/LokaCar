@@ -5,6 +5,7 @@ package fr.eni.lokacar.modele;
  */
 
 public class StatusRest {
+    public int id;
     public boolean status;
     public String message;
 }

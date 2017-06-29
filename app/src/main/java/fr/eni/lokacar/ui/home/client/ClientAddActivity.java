@@ -43,7 +43,6 @@ public class ClientAddActivity extends AppActivity {
     private EditText editTextVille;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +146,7 @@ public class ClientAddActivity extends AppActivity {
                     // Instantiate the RequestQueue.
                     RequestQueue queue = Volley.newRequestQueue(ClientAddActivity.this);
 
-                    String url = String.format(Constant.URL_UPDATE_CLIENT, gerant.session);
+                    String url = String.format(Constant.URL_INSERT_CLIENT, gerant.session);
 
                     // Request a string response from the provided URL.
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -158,8 +157,12 @@ public class ClientAddActivity extends AppActivity {
                                     Gson gson = new Gson();
                                     StatusRest status = gson.fromJson(json, StatusRest.class);
                                     if (status.status) {
-                                        setResult(RESULT_OK, null);
-                                        onBackPressed();
+                                        //Charge la modification
+                                        Intent intent = new Intent(ClientAddActivity.this, ClientUpdateActivity.class);
+                                        intent.putExtra("client", status.id);
+
+                                        startActivity(intent);
+                                        finish();
                                     }
 
                                     Toast.makeText(ClientAddActivity.this, status.message, Toast.LENGTH_SHORT).show();

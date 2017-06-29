@@ -221,7 +221,7 @@ public class ClientUpdateActivity extends AppActivity {
 
         if (!error){
             Gerant gerant = Preference.getGerant(ClientUpdateActivity.this);
-
+            client.nom = nom;
             if (gerant != null) {
 
                 //check network available or not
@@ -241,7 +241,9 @@ public class ClientUpdateActivity extends AppActivity {
                                     Gson gson = new Gson();
                                     StatusRest status = gson.fromJson(json, StatusRest.class);
                                     if (status.status) {
-                                        setResult(RESULT_OK, null);
+                                        Intent output = new Intent();
+                                        output.putExtra("nomClient", nom);
+                                        setResult(RESULT_OK, output);
                                     }
 
                                     Toast.makeText(ClientUpdateActivity.this, status.message, Toast.LENGTH_SHORT).show();
@@ -286,4 +288,12 @@ public class ClientUpdateActivity extends AppActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent output = new Intent();
+        output.putExtra("nomClient", client.nom);
+        setResult(RESULT_OK, output);
+    }
 }

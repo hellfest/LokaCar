@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -50,6 +51,7 @@ public class ClientFragment extends Fragment {
     ListView listViewClients;
     EditText editTextClient;
     ClientAdapter adapter;
+    FloatingActionButton addClient;
 
     public ClientFragment() {
         // Required empty public constructor
@@ -63,6 +65,7 @@ public class ClientFragment extends Fragment {
 
         listViewClients = (ListView) view.findViewById(R.id.listViewClient);
         editTextClient = (EditText) view.findViewById(R.id.editTextClient);
+        addClient = (FloatingActionButton) view.findViewById(R.id.addClient);
 
         editTextClient.addTextChangedListener(new TextWatcher() {
             @Override
@@ -134,6 +137,14 @@ public class ClientFragment extends Fragment {
             }
         });
 
+        addClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ClientAddActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
 
     }
@@ -144,6 +155,9 @@ public class ClientFragment extends Fragment {
 
         if(requestCode == REQUEST_CODE){
             if (resultCode == RESULT_OK){
+
+                String nom = data.getStringExtra("nomClient");
+                editTextClient.setText(nom);
                 afficherClients();
             }
         }
@@ -270,6 +284,8 @@ public class ClientFragment extends Fragment {
         }
 
     }
+
+
 
 
 }
