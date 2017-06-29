@@ -1,6 +1,7 @@
 package fr.eni.lokacar.modele;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by goruchon2016 on 26/06/2017.
@@ -8,8 +9,8 @@ import java.io.Serializable;
 
 public class Location implements Serializable {
     public int id;
-    public String date_debut;
-    public String date_fin;
-    public String id_vehicule;
-    public String id_client;
+    public Date date_debut;
+    public Date date_fin;
+    public Vehicule vehicule;
+    public Client client;
 }

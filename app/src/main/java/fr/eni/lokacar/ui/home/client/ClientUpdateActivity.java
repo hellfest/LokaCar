@@ -1,7 +1,10 @@
 package fr.eni.lokacar.ui.home.client;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -157,6 +160,11 @@ public class ClientUpdateActivity extends AppActivity {
             return true;
         }
 
+        if (id == R.id.action_clientLocation) {
+            locationClient();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -297,4 +305,31 @@ public class ClientUpdateActivity extends AppActivity {
         output.putExtra("nomClient", client.nom);
         setResult(RESULT_OK, output);
     }
+
+    protected void locationClient(){
+
+        Preference.removeClient(ClientUpdateActivity.this);
+
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(ClientUpdateActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(ClientUpdateActivity.this);
+        }
+        builder.setTitle("Faire une location")
+                .setMessage("Voulez-vous enregistrer ce client pour une location ?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Preference.setClient(ClientUpdateActivity.this,client);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 }

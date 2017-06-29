@@ -1,11 +1,14 @@
 package fr.eni.lokacar.ui.home.location;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,7 +32,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.ClientAdapter;
@@ -38,7 +44,9 @@ import fr.eni.lokacar.modele.Client;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.Marque;
 import fr.eni.lokacar.modele.Modele;
+import fr.eni.lokacar.modele.StatusRest;
 import fr.eni.lokacar.modele.Vehicule;
+import fr.eni.lokacar.ui.home.client.ClientUpdateActivity;
 import fr.eni.lokacar.ui.login.LoginActivity;
 import fr.eni.lokacar.utils.Constant;
 import fr.eni.lokacar.utils.Network;
@@ -102,7 +110,7 @@ public class LocationFragment extends Fragment {
                     spinnerModele.setEnabled(false);
                     getListModeles(null);
                     adapterModele.notifyDataSetChanged();
-                    spinnerModele.setSelected(false);
+                    spinnerModele.setSelection(-1);
                 }
 
             }
@@ -112,8 +120,7 @@ public class LocationFragment extends Fragment {
                 spinnerModele.setEnabled(false);
                 getListModeles(null);
                 adapterModele.notifyDataSetChanged();
-                spinnerModele.setSelected(false);
-                //spinnerModele.setSelection(-1);
+                spinnerModele.setSelection(-1);
             }
         });
 
@@ -126,7 +133,6 @@ public class LocationFragment extends Fragment {
                 Modele modele = (Modele) parent.getItemAtPosition(position);
 
                 if (modele.id > 0){
-                    //TODO : charger le liste
                     chargeVehicule(modele.id);
                 }
                 else{
@@ -141,6 +147,43 @@ public class LocationFragment extends Fragment {
             }
         });
 
+
+        listViewLocationVehicule.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Vehicule vehicule = (Vehicule) parent.getItemAtPosition(position);
+
+                final Client client = Preference.getClient(getContext());
+
+                if (client != null){
+                    AlertDialog.Builder builder;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
+                    } else {
+                        builder = new AlertDialog.Builder(getContext());
+                    }
+                    builder.setTitle("Client en mémoire")
+                            .setMessage("Voulez-vous louer ce véhicule au client en mémoire ?\n"
+                                    + client.nom +" "+client.prenom)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    locationVehicule(client,vehicule);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //TODO : Recherche du client
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+                else{
+
+                }
+
+            }
+        });
 
         chargeCategorie();
 
@@ -267,6 +310,7 @@ public class LocationFragment extends Fragment {
 
                                 getListModeles(liste);
 
+                                spinnerModele.setSelection(-1);
                                 adapterModele.notifyDataSetChanged();
 
                             }
@@ -342,5 +386,65 @@ public class LocationFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getActivity().setTitle("Location véhicule");
+    }
+
+    protected void locationVehicule(final Client client, final Vehicule vehicule){
+        if (gerant != null) {
+
+            //check network available or not
+            if (Network.isNetworkAvailable(getContext())) {
+
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(getContext());
+
+                String url = String.format(Constant.URL_LOCATION_INSERT, gerant.session);
+
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            //json = parametre de reponse
+                            public void onResponse(String json) {
+
+                                Gson gson = new Gson();
+                                StatusRest status = gson.fromJson(json, StatusRest.class);
+                                if (status.status) {
+                                    //Suppression du client en mémoire
+                                    Preference.removeClient(getContext());
+
+                                    Intent intent = new Intent(getContext(),LocationFormActivity.class);
+                                    intent.putExtra("location", status.id);
+                                    startActivity(intent);
+
+                                }
+
+                            }
+
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(getContext(), "Erreur enregistrement location", Toast.LENGTH_SHORT).show();
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("vehicule_id", String.valueOf(vehicule.id));
+                        params.put("client_id", String.valueOf(client.id));
+
+                        return params;
+                    }
+                };
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
+
+            }
+        } else {
+            Toast.makeText(getContext(), R.string.error_connexion_gerant, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
     }
 }
