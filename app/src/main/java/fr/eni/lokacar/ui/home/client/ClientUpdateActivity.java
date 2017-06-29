@@ -104,7 +104,7 @@ public class ClientUpdateActivity extends AppActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(ClientUpdateActivity.this, "Erreur de récupération du client", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ClientUpdateActivity.this, R.string.client_error_get, Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -126,7 +126,7 @@ public class ClientUpdateActivity extends AppActivity {
 
             }
         } else {
-            Toast.makeText(ClientUpdateActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ClientUpdateActivity.this, R.string.client_error_insert, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(ClientUpdateActivity.this, LoginActivity.class);
             startActivity(intent);
         }
@@ -191,33 +191,34 @@ public class ClientUpdateActivity extends AppActivity {
         boolean error = false;
 
         if (nom== null || nom.isEmpty()){
-            editTextNom.setError("Le nom est obligatoire");
+            editTextNom.setError(getString(R.string.client_error_nom));
             error = true;
         }
 
         if (prenom == null || prenom.isEmpty()){
-            editTextPrenom.setError("Le prénom est obligatoire");
+            editTextPrenom.setError(getString(R.string.client_error_prenom));
             error = true;
         }
 
         if (permis == null || permis.isEmpty()){
-            editTextNumPermis.setError("Le numéro de permis est obligatoire");
+            editTextNumPermis.setError(getString(R.string.client_error_permis));
             error = true;
         }
 
         if (email == null || email.isEmpty() ){
-            editTextEmail.setError("L'email est obligatoire");
+            editTextEmail.setError(getString(R.string.client_error_email));
             error = true;
         }
         else if (!Utils.isEmailValid(email)){
-            editTextNom.setError("L'email est mal formé");
+            editTextNom.setError(getString(R.string.client_error_email_forme));
             error = true;
         }
 
         if (telephone == null || telephone.isEmpty()){
-            editTextTelephone.setError("Le téléphone de permis est obligatoire");
+            editTextTelephone.setError(getString(R.string.client_error_telephone));
             error = true;
         }
+
 
         if (!error){
             Gerant gerant = Preference.getGerant(ClientUpdateActivity.this);
@@ -254,7 +255,7 @@ public class ClientUpdateActivity extends AppActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
-                            Toast.makeText(ClientUpdateActivity.this, "Erreur de la mise à jour du client", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ClientUpdateActivity.this, R.string.client_erreur_update, Toast.LENGTH_SHORT).show();
 
                         }
                     }){
@@ -279,7 +280,7 @@ public class ClientUpdateActivity extends AppActivity {
 
                 }
             } else {
-                Toast.makeText(ClientUpdateActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ClientUpdateActivity.this,  R.string.client_error_insert, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ClientUpdateActivity.this, LoginActivity.class);
                 startActivity(intent);
             }

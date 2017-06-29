@@ -107,31 +107,31 @@ public class ClientAddActivity extends AppActivity {
         boolean error = false;
 
         if (nom== null || nom.isEmpty()){
-            editTextNom.setError("Le nom est obligatoire");
+            editTextNom.setError(getString(R.string.client_error_nom));
             error = true;
         }
 
         if (prenom == null || prenom.isEmpty()){
-            editTextPrenom.setError("Le prénom est obligatoire");
+            editTextPrenom.setError(getString(R.string.client_error_prenom));
             error = true;
         }
 
         if (permis == null || permis.isEmpty()){
-            editTextNumPermis.setError("Le numéro de permis est obligatoire");
+            editTextNumPermis.setError(getString(R.string.client_error_permis));
             error = true;
         }
 
         if (email == null || email.isEmpty() ){
-            editTextEmail.setError("L'email est obligatoire");
+            editTextEmail.setError(getString(R.string.client_error_email));
             error = true;
         }
         else if (!Utils.isEmailValid(email)){
-            editTextNom.setError("L'email est mal formé");
+            editTextNom.setError(getString(R.string.client_error_email_forme));
             error = true;
         }
 
         if (telephone == null || telephone.isEmpty()){
-            editTextTelephone.setError("Le téléphone de permis est obligatoire");
+            editTextTelephone.setError(getString(R.string.client_error_telephone));
             error = true;
         }
 
@@ -173,7 +173,7 @@ public class ClientAddActivity extends AppActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
-                            Toast.makeText(ClientAddActivity.this, "Erreur de l'ajout du client", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ClientAddActivity.this,  R.string.client_error_insert, Toast.LENGTH_SHORT).show();
 
                         }
                     }){
@@ -198,7 +198,7 @@ public class ClientAddActivity extends AppActivity {
 
                 }
             } else {
-                Toast.makeText(ClientAddActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ClientAddActivity.this, R.string.error_connexion_gerant, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ClientAddActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
