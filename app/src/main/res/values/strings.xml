@@ -23,5 +23,7 @@
     <string name="error_connexion_gerant">Impossible de faire la connexion, veuillez vous connecter</string>
     <string name="client_erreur_update">Erreur de la mise à jour du client</string>
     <string name="client_error_get">Erreur de récupération du client</string>
+    <string name="location_error_liste_marque">Erreur d\'affichage de la liste des marques</string>
+    <string name="location_error_liste_modele">Erreur d\'affichage de la liste des modèles</string>
 
 </resources>

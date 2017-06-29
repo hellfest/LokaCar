@@ -42,4 +42,12 @@ public class Constant {
 
     //-------------Requeste d'ajout du client
     public static final String URL_INSERT_CLIENT = "http://10.1.139.21:8383/slim/client/insert/%s";
+
+    //--------------Request de liste des catégories-----------
+    public static final String URL_LIST_CATEGORIES = "http://10.1.139.21:8383/slim/vehicule/categorie/all/%s";
+
+    //--------------Request de liste des catégories-----------
+    public static final String URL_LIST_MODELES_CATEGORIE = "http://10.1.139.21:8383/slim/vehicule/categorie/modele/%s/%s";
+
+
 }

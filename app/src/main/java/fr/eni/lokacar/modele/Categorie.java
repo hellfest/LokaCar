@@ -10,4 +10,9 @@ public class Categorie implements Serializable{
 
     public int id;
     public String libelle;
+
+    @Override
+    public String toString() {
+        return this.libelle;
+    }
 }

@@ -30,6 +30,7 @@ import fr.eni.lokacar.adpater.VehiculeAdapter;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.Vehicule;
 import fr.eni.lokacar.ui.home.client.ClientFragment;
+import fr.eni.lokacar.ui.home.location.LocationFragment;
 import fr.eni.lokacar.ui.home.vehicules.VehiculeFilterFragment;
 import fr.eni.lokacar.ui.home.vehicules.VehiculeFragment;
 import fr.eni.lokacar.ui.main.MainActivity;
@@ -123,7 +124,7 @@ public class HomeActivity extends AppActivity
         int id = item.getItemId();
 
         if (id == R.id.location) {
-
+            switchFragment(new LocationFragment());
         } else if (id == R.id.vehicule) {
             VehiculeFilterFragment vehiculeFilterFragment = new VehiculeFilterFragment();
             switchFragment(vehiculeFilterFragment);
@@ -131,6 +132,7 @@ public class HomeActivity extends AppActivity
         } else if (id == R.id.client) {
             switchFragment(new ClientFragment());
         } else if (id == R.id.nav_manage) {
+
 
         } else if (id == R.id.chiffre_affaires) {
 
