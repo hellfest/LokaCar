@@ -20,7 +20,7 @@ public class Constant {
     public static final String URL_UPDATE_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/update/%s";
 
     //--------------Requête de creation d'un vehicule ----------------
-    public static final String URL_ADD_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/add/%s" ;
+    public static final String URL_ADD_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/insert/%s" ;
 
     //--------------Requêtes Marques------------------
     public static final String URL_LIST_MARQUE = "http://10.1.139.21:8383/slim/vehicule/marque/all/%s";

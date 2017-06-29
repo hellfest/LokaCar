@@ -11,7 +11,7 @@ public class Vehicule implements Serializable {
 
     public int id;
     public String immatriculation;
-    public String disponible;
+    public boolean disponible;
     public String archive;
     public Modele modele;
     public Agence agence;

@@ -128,7 +128,7 @@
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <GridView
                 android:id="@+id/listViewPhotosVehicule"
@@ -142,15 +142,20 @@
     android:layout_height="wrap_content">
             <ImageButton
                 android:layout_width="wrap_content"
+                android:padding="5dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_menu_camera"
+                android:background="@color/greenLogo"
                 android:onClick="onClickButtonPhotoVehicule" />
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/ic_menu_gallery"
+                android:background="@color/greenLogo"
                 android:onClick="onClickButtonPhotoVehicule" />
 </LinearLayout>
         </LinearLayout>
@@ -163,6 +168,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:onClick="onClickBoutonValiderVehicule"
+        android:background="@color/greenLogo"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:text="Valider" />
 
 

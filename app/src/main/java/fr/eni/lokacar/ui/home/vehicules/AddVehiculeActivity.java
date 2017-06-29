@@ -75,7 +75,7 @@ public class AddVehiculeActivity extends AppActivity {
         spinnerMarqueAddVehicule = (Spinner) findViewById(R.id.spinnerMarqueAddVehicule);
         spinnerModeleAddVehicule = (Spinner) findViewById(R.id.spinnerModeleAddVehicule);
         editTextImmatriculation = (EditText) findViewById(R.id.editTextImmatriculation);
-        //chekBoxDisponible = (CheckBox) findViewById(R.id.ChekBoxDisponible);
+        chekBoxDisponible = (CheckBox) findViewById(R.id.chekBoxDisponible);
         boutonValiderVehicule = (Button) findViewById(R.id.boutonValiderVehicule);
         textViewTitreAjoutVehicule = (TextView) findViewById(R.id.textViewTitreAjoutVehicule);
 
