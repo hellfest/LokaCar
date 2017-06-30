@@ -3,10 +3,14 @@ package fr.eni.lokacar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
+import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.ui.home.HomeActivity;
 import fr.eni.lokacar.ui.login.LoginActivity;
+import fr.eni.lokacar.utils.Preference;
+import fr.eni.lokacar.utils.Utils;
 
 
 /**
@@ -32,6 +36,8 @@ public class AppActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("DEMARRAGE", "APPACT");
+        Utils.testSession(AppActivity.this);
 
         //Check actionBar
         if (getSupportActionBar() != null)
@@ -39,5 +45,6 @@ public class AppActivity extends AppCompatActivity {
             if(!(this instanceof HomeActivity) && !(this instanceof LoginActivity))
             //Afficher la flèche retour
             {getSupportActionBar().setDisplayHomeAsUpEnabled(true);}
+
     }
 }

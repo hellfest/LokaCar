@@ -41,6 +41,7 @@ import fr.eni.lokacar.utils.Network;
 import fr.eni.lokacar.utils.Preference;
 
 public class LocationListActivity extends AppActivity {
+    private static final int REQUEST_CODE = 200;
     private ListView listViewLocation;
     private LocationAdapter adapter;
     private List<Location> listLocation;
@@ -58,8 +59,8 @@ public class LocationListActivity extends AppActivity {
 
         adapter = new LocationAdapter(LocationListActivity.this,R.layout.item_list_location, listLocation);
         listViewLocation.setAdapter(adapter);
-        getLocation();
 
+        getLocation();
 
         listViewLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -69,11 +70,22 @@ public class LocationListActivity extends AppActivity {
                 Intent intent = new Intent(LocationListActivity.this,LocationFormActivity.class);
                 intent.putExtra("location", location.id);
 
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
 
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                getLocation();
+            }
+        }
     }
 
     private void getLocation() {
@@ -94,8 +106,8 @@ public class LocationListActivity extends AppActivity {
                             //json = parametre de reponse
                             public void onResponse(String json) {
 
-                                //Gson gson = new Gson();
-                                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                                Gson gson = new Gson();
+                                //Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
                                 Type listType = new TypeToken<ArrayList<Location>>(){}.getType();
                                 listLocation.clear();
                                 listLocation.addAll((Collection<? extends Location>) gson.fromJson(json, listType));

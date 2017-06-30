@@ -70,7 +70,14 @@ public class Constant {
     //--------------Request de liste des locations-----------
     public static final String URL_LOCATION_LISTE = "http://10.1.139.21:8383/slim/location/liste/%s";
 
+    //--------------Request update location-----------
+    public static final String URL_UPDATE_LOCATION = "http://10.1.139.21:8383/slim/location/update/%s";
+
     public static final int DATE_MINIMUM = 1990;
+
+
+    //--------------Request ping gerant-----------
+    public static final String URL_PING = "http://10.1.139.21:8383/slim/gerant/ping/%s";
 
 
 }

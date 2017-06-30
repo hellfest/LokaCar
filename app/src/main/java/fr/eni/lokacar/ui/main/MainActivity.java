@@ -3,6 +3,7 @@ package fr.eni.lokacar.ui.main;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,12 +24,13 @@ public class MainActivity extends AppActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.e("DEMARRAGE", "MAINACT");
+
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
 
-                Gerant gerant1 = Preference.getGerant(MainActivity.this);
 
                 if (Preference.getGerant(MainActivity.this) != null){
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);

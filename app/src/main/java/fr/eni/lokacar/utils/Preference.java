@@ -94,7 +94,7 @@ public class Preference {
     public static void removeVehicule(Context context) {
 
         get(context)
-                .edit().remove(PREF_VEHICULE);
+                .edit().remove(PREF_VEHICULE).commit();
     }
 
     //Récupéréation de tout l'objet enregistré en JSON
@@ -131,6 +131,13 @@ public class Preference {
     public static void removeClient(Context context) {
 
         get(context)
-                .edit().remove(PREF_CLIENT);
+                .edit().remove(PREF_CLIENT).commit();
+    }
+
+    // Methode pour enregistrer le Gerant
+    public static void removeGerant(Context context) {
+
+        get(context)
+                .edit().remove(PREF_GERANT).commit();
     }
 }

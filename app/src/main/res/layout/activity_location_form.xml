@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_color"
     android:orientation="vertical"
+    android:focusableInTouchMode="true"
     tools:context="fr.eni.lokacar.ui.home.vehicules.DetailsVehiculeActivity">
 
 
@@ -38,7 +39,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
+            android:layout_weight="0.5"
             android:orientation="vertical">
 
             <LinearLayout
@@ -124,7 +125,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_weight="0.5"
             android:orientation="vertical">
 
             <LinearLayout
@@ -179,6 +180,34 @@
                     android:gravity="left"
                     android:paddingLeft="5dp"
                     tools:text="50 €/jour" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:gravity="right"
+                    android:text="Coût :" />
+
+
+                <TextView
+                    android:id="@+id/editTextCout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    tools:text="150 €" />
 
             </LinearLayout>
 

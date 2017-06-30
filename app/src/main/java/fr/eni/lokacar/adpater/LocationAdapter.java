@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import fr.eni.lokacar.R;
@@ -74,20 +75,21 @@ public class LocationAdapter extends ArrayAdapter<Location> {
         viewHolder.textViewNomClient.setText("Client : " + location.client.nom+" "+ location.client.prenom);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(location.date_debut);
+        Date d = location.getDateDebut();
+        calendar.setTime(d);
 
-        viewHolder.textViewDateDebut.setText("Du " + String.format("%s/%s/%s",
+        viewHolder.textViewDateDebut.setText("Du " + String.format("%02d/%02d/%s",
                 calendar.get(Calendar.DAY_OF_MONTH)
-                ,calendar.get(Calendar.MONTH)
+                ,calendar.get(Calendar.MONTH) + 1
                 ,calendar.get(Calendar.YEAR)));
 
-        calendar.setTime(location.date_fin);
+        calendar.setTime(location.getDateFin());
 
         if(calendar.get(Calendar.YEAR) > Constant.DATE_MINIMUM) {
 
-            viewHolder.textViewDateFin.setText("au "+String.format("%s/%s/%s",
+            viewHolder.textViewDateFin.setText("au "+String.format("%02d/%02d/%s",
                     calendar.get(Calendar.DAY_OF_MONTH)
-                    , calendar.get(Calendar.MONTH)
+                    , calendar.get(Calendar.MONTH) + 1
                     , calendar.get(Calendar.YEAR)));
         }
         else{

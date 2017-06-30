@@ -30,4 +30,5 @@
     <string name="location_pattern_prix">%s €/jour</string>
     <string name="location_pattern_puissance">%s CV</string>
     <string name="location_error_liste_vehicule">Erreur de récupération de la liste des véhicules</string>
+    <string name="location_erreur_update">Erreur de la mise à jour de la location</string>
 </resources>
