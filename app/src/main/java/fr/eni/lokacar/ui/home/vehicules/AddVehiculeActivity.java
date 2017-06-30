@@ -148,6 +148,7 @@ public class AddVehiculeActivity extends AppActivity {
     }
 
     public void onClickBoutonValiderVehicule(View view) {
+
         addVehicule();
     }
 
