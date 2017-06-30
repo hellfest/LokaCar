@@ -245,6 +245,7 @@ public class VehiculeFilterFragment extends Fragment {
                                 listVehicule.clear();
                                 listVehicule.addAll((Collection<? extends Vehicule>) gson.fromJson(json, listType));
 
+                                adapterVehicule.setOriginalData(listVehicule);
                                 adapterVehicule.notifyDataSetChanged();
                             }
 
@@ -440,6 +441,8 @@ public class VehiculeFilterFragment extends Fragment {
 
                                     listVehicule.clear();
                                     listVehicule.addAll((Collection<? extends Vehicule>) gson.fromJson(json, listType));
+                                    adapterVehicule.setOriginalData(listVehicule);
+
                                     adapterVehicule.notifyDataSetChanged();
                                     if (listVehicule.size() < 1)
                                     {

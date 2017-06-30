@@ -39,6 +39,11 @@ public class VehiculeAdapter extends ArrayAdapter<Vehicule> implements Filterabl
         this.originalData = new ArrayList<Vehicule>(objects);
     }
 
+    public void setOriginalData(List<Vehicule> listVehicules){
+        this.originalData.clear();
+        this.originalData.addAll(listVehicules);
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder viewholder; // définition

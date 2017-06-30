@@ -142,16 +142,19 @@ public class SearchVehiculeActivity extends AppCompatActivity {
             intent.putExtra("modele", modele_id);
             intent.putExtra("disponible", disponible);
             setResult(RESULT_OK, intent);
+            onBackPressed();
 
+        } else if (marque != null || marque.id != 0) {
+            Toast.makeText(this, "Le modèle doit être renseigné, j'ai pas fait la bonne requête, suis un gros nul", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent();
             intent.putExtra("modele", -1);
             intent.putExtra("disponible", disponible);
             setResult(RESULT_OK, intent);
+            onBackPressed();
 
-            //Toast.makeText(this, "La saisie du modèle est obligatoire", Toast.LENGTH_SHORT).show();
         }
-        onBackPressed();
+
     }
 
 
