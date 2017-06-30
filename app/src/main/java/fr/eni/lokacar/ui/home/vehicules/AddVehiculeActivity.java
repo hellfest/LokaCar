@@ -175,7 +175,6 @@ public class AddVehiculeActivity extends AppActivity {
                 error = true;
             }
             if (!error) {
-                Gerant gerant = Preference.getGerant(AddVehiculeActivity.this);
 
                 if (gerant != null) {
 
@@ -196,7 +195,7 @@ public class AddVehiculeActivity extends AppActivity {
                                         Gson gson = new Gson();
                                         StatusRest status = gson.fromJson(json, StatusRest.class);
                                         if (status.status) {
-                                            setResult(RESULT_OK, null);
+                                            setResult(RESULT_OK);
                                             onBackPressed();
                                         }
 
@@ -219,6 +218,7 @@ public class AddVehiculeActivity extends AppActivity {
                                 params.put("modele", String.valueOf(modele_id));
                                 params.put("immatriculation", immatriculation);
                                 params.put("disponible", (disponible) ? "1" : "0");
+                                params.put("agence", String.valueOf(gerant.agence.id));
                                 return params;
                             }
                         };

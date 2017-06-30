@@ -40,13 +40,18 @@ import fr.eni.lokacar.modele.Marque;
 import fr.eni.lokacar.modele.Modele;
 import fr.eni.lokacar.modele.StatusRest;
 import fr.eni.lokacar.modele.Vehicule;
+import fr.eni.lokacar.ui.home.client.ClientUpdateActivity;
 import fr.eni.lokacar.ui.login.LoginActivity;
 import fr.eni.lokacar.utils.Constant;
 import fr.eni.lokacar.utils.Network;
 import fr.eni.lokacar.utils.Preference;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class VehiculeFilterFragment extends Fragment {
+
+    private static final int REQUEST_CODE = 200;
     private static final String TAG = "Vehicules";
     ListView listViewVehicules;
     //Pour saisir marque et modèle afin de filtrer la liste
@@ -74,7 +79,7 @@ public class VehiculeFilterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vehicule, container, false);
 
         listViewVehicules = (ListView) view.findViewById(R.id.listViewVehicule);
-       // autoTextViewVehiculeMarque = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeMarque);
+
         autoTextViewVehiculeModele = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeModele);
 
         boutonAddVehicule = (FloatingActionButton) view.findViewById(R.id.addVehicule);
@@ -112,7 +117,8 @@ public class VehiculeFilterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), AddVehiculeActivity.class);
-                startActivity(intent);
+
+                startActivityForResult(intent,REQUEST_CODE);
             }
         });
 
@@ -151,8 +157,25 @@ public class VehiculeFilterFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+
+                afficherVehicules();
+               // afficherModele();
+            }
+        }
+    }
+
     //Méthode permettant de récupérer la liste des véhicules
     public void afficherVehicules() {
+
+        if(listModele != null) {
+            Log.e(TAG, "listModele: " + listModele.size());
+        }
 
         if (gerant != null) {
 
@@ -205,8 +228,8 @@ public class VehiculeFilterFragment extends Fragment {
     //Méthode permettant de récupérer la liste des véhicules
     public void afficherModele() {
         
-        if (gerant != null) {
 
+            if (gerant != null) {
             //check network available or not
             if (Network.isNetworkAvailable(getContext())) {
 
@@ -223,7 +246,7 @@ public class VehiculeFilterFragment extends Fragment {
 
                                 Gson gson = new Gson();
 
-                                Type listType = new TypeToken<ArrayList<Marque>>() {
+                                Type listType = new TypeToken<ArrayList<Modele>>() {
                                 }.getType();
                                 listModele.clear();
                                 listModele.addAll((Collection<? extends Modele>) gson.fromJson(json, listType));
