@@ -84,8 +84,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            tools:text="245-XDA-322"
-            android:inputType="none|textNoSuggestions"/>
+            android:inputType="none|textNoSuggestions"
+            tools:text="245-XDA-322" />
 
 
     </LinearLayout>
@@ -138,27 +138,30 @@
                 android:layout_weight="1"
                 android:numColumns="2"
                 android:text="Disponible:" />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:padding="5dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_menu_camera"
-                android:background="@color/greenLogo"
-                android:onClick="onClickButtonPhotoVehicule" />
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_menu_gallery"
-                android:background="@color/greenLogo"
-                android:onClick="onClickButtonPhotoVehicule" />
-</LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/greenLogo"
+                    android:onClick="onClickButtonPhotoVehicule"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_menu_camera" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/greenLogo"
+                    android:onClick="onClickButtonPhotoVehicule"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_menu_gallery" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -168,10 +171,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:onClick="onClickBoutonValiderVehicule"
-        android:background="@color/greenLogo"
-        android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/greenLogo"
+        android:onClick="onClickBoutonValiderVehicule"
         android:text="Valider" />
 
 

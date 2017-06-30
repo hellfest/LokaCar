@@ -10,6 +10,9 @@ public class Constant {
     // --------------Requêtes VEHICULES------------------
     public static final String URL_LIST_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/all/%s";
 
+    // --------------Requête recherche VEHICULES------------------
+    public static final String  URL_SEARCH_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/search/%s";
+
     //--------------Requête de suppression d'un vehicule ----------------
     public static final String URL_DELETE_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/delete/%s/%s";
 

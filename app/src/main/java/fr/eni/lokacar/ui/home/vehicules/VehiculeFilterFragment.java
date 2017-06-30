@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -34,7 +35,9 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.VehiculeAdapter;
@@ -57,10 +60,13 @@ public class VehiculeFilterFragment extends Fragment {
     private static final int REQUEST_CODE = 200;
     private static final String TAG = "Vehicules";
     private static final int REQUEST_CODE2 = 300;
+    private static final  int REQUEST_CODE3 = 400;
     ListView listViewVehicules;
     //Pour saisir marque et modèle afin de filtrer la liste
     private AutoCompleteTextView autoTextViewVehiculeMarque;
     private AutoCompleteTextView autoTextViewVehiculeModele;
+    private FloatingActionButton refresh;
+
 
     private FloatingActionButton boutonAddVehicule;
 
@@ -81,6 +87,7 @@ public class VehiculeFilterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vehicule, container, false);
+
         // Pour avoir le menu du fragment depuis le fragment
         setHasOptionsMenu(true);
 
@@ -89,6 +96,7 @@ public class VehiculeFilterFragment extends Fragment {
         autoTextViewVehiculeModele = (AutoCompleteTextView) view.findViewById(R.id.autoTextViewVehiculeModele);
 
         boutonAddVehicule = (FloatingActionButton) view.findViewById(R.id.addVehicule);
+        refresh = (FloatingActionButton) view.findViewById(R.id.refresh);
 
         return view;
 
@@ -109,7 +117,7 @@ public class VehiculeFilterFragment extends Fragment {
         afficherVehicules();
         afficherModele();
 
-        
+        // Methode d'envoi du véhicule quand click sur la ligne pour détails
         listViewVehicules.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -124,15 +132,26 @@ public class VehiculeFilterFragment extends Fragment {
             }
         });
 
+
+        // Méthode d'envoi vers le formulaire d'ajout d'un véhicule
         boutonAddVehicule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), AddVehiculeActivity.class);
-
                 startActivityForResult(intent,REQUEST_CODE);
             }
         });
 
+        // Méthode de rafraîchissement de la liste après une recherche
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                afficherVehicules();
+                autoTextViewVehiculeModele.setText("");
+            }
+        });
+
+        // Méthode pour supprimer un véhicule sur un click long
         listViewVehicules.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -176,13 +195,21 @@ public class VehiculeFilterFragment extends Fragment {
             if (resultCode == RESULT_OK){
 
                 afficherVehicules();
-               // afficherModele();
+
             }
         }
         if(requestCode == REQUEST_CODE2){
             if (resultCode == RESULT_OK){
 
                 afficherVehicules();
+                autoTextViewVehiculeModele.setText("");
+            }
+        }
+
+        if(requestCode == REQUEST_CODE3){
+            if (resultCode == RESULT_OK){
+
+                searchVehicules(data.getIntExtra("modele", 0), data.getBooleanExtra("disponible", true));
                 autoTextViewVehiculeModele.setText("");
             }
         }
@@ -241,7 +268,7 @@ public class VehiculeFilterFragment extends Fragment {
 
     }
 
-    //Méthode permettant de récupérer la liste des véhicules
+    //Méthode permettant de récupérer la liste des marques
     public void afficherModele() {
         
 
@@ -377,13 +404,76 @@ public class VehiculeFilterFragment extends Fragment {
 
 
 
-        if (id == R.id.action_vehicule_add) {
-
+        if (id == R.id.action_vehicule_search) {
+            Intent intent = new Intent(getContext(), SearchVehiculeActivity.class);
+            startActivityForResult(intent,REQUEST_CODE3);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    //Méthode permettant de récupérer la liste des véhicules par recherche
+    public void searchVehicules(final int modele_id, final boolean disponible) {
 
-}
+
+            if (gerant != null) {
+
+                //check network available or not
+                if (Network.isNetworkAvailable(getContext())) {
+
+                    // Instantiate the RequestQueue.
+                    RequestQueue queue = Volley.newRequestQueue(getContext());
+                    String url = String.format(Constant.URL_SEARCH_VEHICULE, gerant.session);
+
+                    // Request a string response from the provided URL.
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                            new Response.Listener<String>() {
+                                @Override
+                                //json = parametre de reponse
+                                public void onResponse(String json) {
+
+                                    Gson gson = new Gson();
+
+                                    Type listType = new TypeToken<ArrayList<Vehicule>>() {
+                                    }.getType();
+
+                                    listVehicule.clear();
+                                    listVehicule.addAll((Collection<? extends Vehicule>) gson.fromJson(json, listType));
+                                    adapterVehicule.notifyDataSetChanged();
+                                    if (listVehicule.size() < 1)
+                                    {
+                                        Toast.makeText(getContext(), "Pas de véhicule correspondant aux critères", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                            Toast.makeText(getContext(), "Erreur d'affichage de la liste", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("modele", String.valueOf(modele_id));
+                            params.put("disponible", (disponible) ? "1" : "0");
+                            params.put("agence", String.valueOf(gerant.agence.id));
+                            return params;
+                        }
+                    };
+                    // Add the request to the RequestQueue.
+                    queue.add(stringRequest);
+
+                }
+            } else {
+                Toast.makeText(getContext(), "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+
+        }
+    }
+

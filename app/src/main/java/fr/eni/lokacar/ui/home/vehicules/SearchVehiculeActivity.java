@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -34,25 +31,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.eni.lokacar.AppActivity;
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.modele.Gerant;
 import fr.eni.lokacar.modele.Marque;
 import fr.eni.lokacar.modele.Modele;
 import fr.eni.lokacar.modele.StatusRest;
+import fr.eni.lokacar.modele.Vehicule;
 import fr.eni.lokacar.ui.home.HomeActivity;
-import fr.eni.lokacar.ui.home.client.ClientAddActivity;
 import fr.eni.lokacar.ui.login.LoginActivity;
 import fr.eni.lokacar.utils.Constant;
 import fr.eni.lokacar.utils.Network;
 import fr.eni.lokacar.utils.Preference;
-import fr.eni.lokacar.utils.Utils;
 
-import static fr.eni.lokacar.R.id.autoTextViewVehiculeModele;
-import static fr.eni.lokacar.R.id.linearLayoutListViewPhoto;
-import static java.security.AccessController.getContext;
-
-public class AddVehiculeActivity extends AppActivity {
+public class SearchVehiculeActivity extends AppCompatActivity {
 
     private Spinner spinnerMarqueAddVehicule;
     private Spinner spinnerModeleAddVehicule;
@@ -68,11 +59,11 @@ public class AddVehiculeActivity extends AppActivity {
     Marque marque;
     Modele modele;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_vehicule);
-
 
         spinnerMarqueAddVehicule = (Spinner) findViewById(R.id.spinnerMarqueAddVehicule);
         spinnerModeleAddVehicule = (Spinner) findViewById(R.id.spinnerModeleAddVehicule);
@@ -81,12 +72,13 @@ public class AddVehiculeActivity extends AppActivity {
         textViewTitreAjoutVehicule = (TextView) findViewById(R.id.textViewTitreAjoutVehicule);
         linearLayoutListViewPhoto = (LinearLayout) findViewById(R.id.linearLayoutListViewPhoto);
 
-        textViewTitreAjoutVehicule.setText("Formulaire création d'un véhicule");
+        textViewTitreAjoutVehicule.setText("Formulaire de Recherche d'un véhicule");
         linearLayoutListViewPhoto.setVisibility(View.INVISIBLE);
+        editTextImmatriculation.setVisibility(View.GONE);
 
 
         //Récupération du gérant connecté
-        gerant = Preference.getGerant(AddVehiculeActivity.this);
+        gerant = Preference.getGerant(SearchVehiculeActivity.this);
 
         // Récupération de la marque quand sélectionnée dans la liste
         spinnerMarqueAddVehicule.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -113,135 +105,55 @@ public class AddVehiculeActivity extends AppActivity {
             }
         });
 
-        adapterModele = new ArrayAdapter<Modele>(AddVehiculeActivity.this,
+        // Pour afficher la liste des marques
+        adapterMarque = new ArrayAdapter<Marque>(SearchVehiculeActivity.this,
+                android.R.layout.simple_dropdown_item_1line, listMarques);
+        spinnerMarqueAddVehicule.setAdapter(adapterMarque);
+        // Pour afficher la liste des modèles en fonction de la marque
+        adapterModele = new ArrayAdapter<Modele>(SearchVehiculeActivity.this,
                 android.R.layout.simple_dropdown_item_1line, listModelesMarque);
         spinnerModeleAddVehicule.setAdapter(adapterModele);
-
 
         afficherMarque();
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_vehicule_add, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        if (id == R.id.action_vehicule_add) {
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    //Méthode de validation des valeurs sélectionnées
     public void onClickBoutonValiderVehicule(View view) {
 
-        addVehicule();
+        searchVehicules();
     }
 
-    /**
-     *
-     */
-    private void addVehicule() {
+
+    //Méthode pour renvoyer les critères de recherche au fragment
+    public void searchVehicules() {
+        final boolean disponible;
+        if (chekBoxDisponible.isChecked()) {
+            disponible = true;
+        } else {
+            disponible = false;
+        }
 
         if (modele != null && modele.id > 0) {
 
-            final String immatriculation = editTextImmatriculation.getText().toString();
             final int modele_id = modele.id;
-            final boolean disponible;
 
-            if (chekBoxDisponible.isChecked()) {
-                disponible = true;
-            } else {
-                disponible = false;
-            }
+            Intent intent = new Intent();
+            intent.putExtra("modele", modele_id);
+            intent.putExtra("disponible", disponible);
+            setResult(RESULT_OK, intent);
 
-            boolean error = false;
-
-            if (immatriculation == null || immatriculation.isEmpty()) {
-                editTextImmatriculation.setError("L'immatriculation est obligatoire");
-                error = true;
-            }
-            if (!error) {
-
-                if (gerant != null) {
-
-                    //check network available or not
-                    if (Network.isNetworkAvailable(AddVehiculeActivity.this)) {
-
-                        // Instantiate the RequestQueue.
-                        RequestQueue queue = Volley.newRequestQueue(AddVehiculeActivity.this);
-
-                        String url = String.format(Constant.URL_ADD_VEHICULE, gerant.session);
-
-                        // Request a string response from the provided URL.
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    //json = parametre de reponse
-                                    public void onResponse(String json) {
-                                        Gson gson = new Gson();
-                                        StatusRest status = gson.fromJson(json, StatusRest.class);
-                                        if (status.status) {
-                                            setResult(RESULT_OK);
-                                            onBackPressed();
-                                        }
-
-                                        Toast.makeText(AddVehiculeActivity.this, status.message, Toast.LENGTH_SHORT).show();
-
-                                    }
-
-                                }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                                Toast.makeText(AddVehiculeActivity.this, "Erreur de l'ajout du véhicule", Toast.LENGTH_SHORT).show();
-
-                            }
-                        }) {
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> params = new HashMap<String, String>();
-
-                                params.put("modele", String.valueOf(modele_id));
-                                params.put("immatriculation", immatriculation);
-                                params.put("disponible", (disponible) ? "1" : "0");
-                                params.put("agence", String.valueOf(gerant.agence.id));
-                                return params;
-                            }
-                        };
-
-                        // Add the request to the RequestQueue.
-                        queue.add(stringRequest);
-
-                    }
-                } else {
-                    Toast.makeText(AddVehiculeActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddVehiculeActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-
-            }
         } else {
-            Toast.makeText(AddVehiculeActivity.this, "Impossible de créer le nouveau véhicule. Le modèle et la  marque doivent être renseignés", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.putExtra("modele", -1);
+            intent.putExtra("disponible", disponible);
+            setResult(RESULT_OK, intent);
+
+            //Toast.makeText(this, "La saisie du modèle est obligatoire", Toast.LENGTH_SHORT).show();
         }
+        onBackPressed();
     }
+
 
     //Méthode permettant de récupérer la liste des marques
     public void afficherMarque() {
@@ -249,10 +161,10 @@ public class AddVehiculeActivity extends AppActivity {
         if (gerant != null) {
 
             //check network available or not
-            if (Network.isNetworkAvailable(AddVehiculeActivity.this)) {
+            if (Network.isNetworkAvailable(SearchVehiculeActivity.this)) {
 
                 // Instantiate the RequestQueue.
-                RequestQueue queue = Volley.newRequestQueue(AddVehiculeActivity.this);
+                RequestQueue queue = Volley.newRequestQueue(SearchVehiculeActivity.this);
                 String url = String.format(Constant.URL_LIST_MARQUE, gerant.session);
 
                 // Request a string response from the provided URL.
@@ -272,18 +184,15 @@ public class AddVehiculeActivity extends AppActivity {
                                 listMarques.add(m1);
 
                                 listMarques.addAll((Collection<? extends Marque>) gson.fromJson(json, listType));
-                                // Pour afficher la liste des marques
-                                adapterMarque = new ArrayAdapter<Marque>(AddVehiculeActivity.this,
-                                        android.R.layout.simple_dropdown_item_1line, listMarques);
-                                spinnerMarqueAddVehicule.setAdapter(adapterMarque);
 
+                                adapterMarque.notifyDataSetChanged();
                             }
 
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(AddVehiculeActivity.this, "Erreur d'affichage de la liste des marques", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchVehiculeActivity.this, "Erreur d'affichage de la liste des marques", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -292,8 +201,8 @@ public class AddVehiculeActivity extends AppActivity {
 
             }
         } else {
-            Toast.makeText(AddVehiculeActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddVehiculeActivity.this, HomeActivity.class);
+            Toast.makeText(SearchVehiculeActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SearchVehiculeActivity.this, HomeActivity.class);
             startActivity(intent);
         }
 
@@ -305,10 +214,10 @@ public class AddVehiculeActivity extends AppActivity {
         if (gerant != null) {
 
             //check network available or not
-            if (Network.isNetworkAvailable(AddVehiculeActivity.this)) {
+            if (Network.isNetworkAvailable(SearchVehiculeActivity.this)) {
 
                 // Instantiate the RequestQueue.
-                RequestQueue queue = Volley.newRequestQueue(AddVehiculeActivity.this);
+                RequestQueue queue = Volley.newRequestQueue(SearchVehiculeActivity.this);
                 String url = String.format(Constant.URL_LIST_MARQUE_MODELES, idMarque, gerant.session);
 
                 // Request a string response from the provided URL.
@@ -337,7 +246,7 @@ public class AddVehiculeActivity extends AppActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(AddVehiculeActivity.this, "Erreur d'affichage de la liste des marques", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchVehiculeActivity.this, "Erreur d'affichage de la liste des marques", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -346,10 +255,12 @@ public class AddVehiculeActivity extends AppActivity {
 
             }
         } else {
-            Toast.makeText(AddVehiculeActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddVehiculeActivity.this, HomeActivity.class);
+            Toast.makeText(SearchVehiculeActivity.this, "Impossible de faire la connexion, veuillez vous connecter", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SearchVehiculeActivity.this, HomeActivity.class);
             startActivity(intent);
         }
 
     }
+
 }
+

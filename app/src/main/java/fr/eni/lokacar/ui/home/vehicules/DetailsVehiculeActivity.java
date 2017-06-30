@@ -80,7 +80,7 @@ public class DetailsVehiculeActivity extends AppActivity {
         listViewPhotosVehicule = (GridView) findViewById(R.id.listViewPhotosVehicule);
 
 
-        linearLayoutListViewPhoto.setVisibility(View.VISIBLE);
+
 
         textViewTitreAjoutVehicule.setText("Formulaire Modification d'un véhicule");
 
@@ -144,6 +144,7 @@ public class DetailsVehiculeActivity extends AppActivity {
 
 
     public void onClickBoutonValiderVehicule(View view) {
+
         updateVehicule();
     }
 
