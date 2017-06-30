@@ -10,6 +10,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,6 +56,7 @@ public class VehiculeFilterFragment extends Fragment {
 
     private static final int REQUEST_CODE = 200;
     private static final String TAG = "Vehicules";
+    private static final int REQUEST_CODE2 = 300;
     ListView listViewVehicules;
     //Pour saisir marque et modèle afin de filtrer la liste
     private AutoCompleteTextView autoTextViewVehiculeMarque;
@@ -77,6 +81,8 @@ public class VehiculeFilterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_vehicule, container, false);
+        // Pour avoir le menu du fragment depuis le fragment
+        setHasOptionsMenu(true);
 
         listViewVehicules = (ListView) view.findViewById(R.id.listViewVehicule);
 
@@ -95,6 +101,11 @@ public class VehiculeFilterFragment extends Fragment {
 
         getActivity().setTitle("Gestion des véhicules");
 
+        //Pour créer une seule fois l'adapter
+        adapterVehicule = new VehiculeAdapter(getContext(), R.layout.item_vehicule, listVehicule);
+        listViewVehicules.setAdapter(adapterVehicule);
+
+
         afficherVehicules();
         afficherModele();
 
@@ -109,7 +120,7 @@ public class VehiculeFilterFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("vehicule", listVehicule.get(position));
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE2);
             }
         });
 
@@ -168,6 +179,13 @@ public class VehiculeFilterFragment extends Fragment {
                // afficherModele();
             }
         }
+        if(requestCode == REQUEST_CODE2){
+            if (resultCode == RESULT_OK){
+
+                afficherVehicules();
+                autoTextViewVehiculeModele.setText("");
+            }
+        }
     }
 
     //Méthode permettant de récupérer la liste des véhicules
@@ -199,10 +217,8 @@ public class VehiculeFilterFragment extends Fragment {
                                 }.getType();
                                 listVehicule.clear();
                                 listVehicule.addAll((Collection<? extends Vehicule>) gson.fromJson(json, listType));
-                                adapterVehicule = new VehiculeAdapter(getContext(), R.layout.item_vehicule, listVehicule);
-                                listViewVehicules.setAdapter(adapterVehicule);
 
-                                //adapterMarque.notifyDataSetChanged();
+                                adapterVehicule.notifyDataSetChanged();
                             }
 
                         }, new Response.ErrorListener() {
@@ -343,5 +359,31 @@ public class VehiculeFilterFragment extends Fragment {
         }
 
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_fragment_vehicule, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+
+
+        if (id == R.id.action_vehicule_add) {
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

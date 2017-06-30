@@ -1,11 +1,8 @@
 package fr.eni.lokacar.ui.home.vehicules;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,12 +40,10 @@ import fr.eni.lokacar.modele.Modele;
 import fr.eni.lokacar.modele.StatusRest;
 import fr.eni.lokacar.modele.Vehicule;
 import fr.eni.lokacar.ui.home.HomeActivity;
-import fr.eni.lokacar.ui.home.client.ClientUpdateActivity;
 import fr.eni.lokacar.ui.login.LoginActivity;
 import fr.eni.lokacar.utils.Constant;
 import fr.eni.lokacar.utils.Network;
 import fr.eni.lokacar.utils.Preference;
-import fr.eni.lokacar.utils.Utils;
 
 public class DetailsVehiculeActivity extends AppActivity {
 
@@ -60,7 +55,6 @@ public class DetailsVehiculeActivity extends AppActivity {
     private CheckBox chekBoxDisponible;
     private LinearLayout linearLayoutListViewPhoto;
     private GridView listViewPhotosVehicule;
-    private Button boutonValiderVehicule;
 
     private Vehicule vehicule;
     private Gerant gerant;
@@ -84,7 +78,7 @@ public class DetailsVehiculeActivity extends AppActivity {
         chekBoxDisponible = (CheckBox) findViewById(R.id.chekBoxDisponible);
         linearLayoutListViewPhoto = (LinearLayout) findViewById(R.id.linearLayoutListViewPhoto);
         listViewPhotosVehicule = (GridView) findViewById(R.id.listViewPhotosVehicule);
-        boutonValiderVehicule = (Button) findViewById(R.id.boutonValiderVehicule);
+
 
         linearLayoutListViewPhoto.setVisibility(View.VISIBLE);
 
@@ -127,6 +121,10 @@ public class DetailsVehiculeActivity extends AppActivity {
                 }
             });
 
+            // Pour afficher la liste des marques
+            adapterMarque = new ArrayAdapter<Marque>(DetailsVehiculeActivity.this,
+                    android.R.layout.simple_dropdown_item_1line, listMarques);
+            spinnerMarqueAddVehicule.setAdapter(adapterMarque);
 
             adapterModele = new ArrayAdapter<Modele>(DetailsVehiculeActivity.this,
                     android.R.layout.simple_dropdown_item_1line, listModelesMarque);
@@ -176,10 +174,7 @@ public class DetailsVehiculeActivity extends AppActivity {
                                 listMarques.addAll((Collection<? extends Marque>) gson.fromJson(json, listType));
 
 
-                                // Pour afficher la liste des marques
-                                adapterMarque = new ArrayAdapter<Marque>(DetailsVehiculeActivity.this,
-                                        android.R.layout.simple_dropdown_item_1line, listMarques);
-                                spinnerMarqueAddVehicule.setAdapter(adapterMarque);
+                                adapterMarque.notifyDataSetChanged();
 
                                 for (int j = 0; j < listMarques.size(); j++) {
 
@@ -285,71 +280,73 @@ public class DetailsVehiculeActivity extends AppActivity {
 
         if (immatriculation == null || immatriculation.isEmpty()) {
             editTextImmatriculation.setError("L'immatriculation est obligatoire");
-            error = true;}
+            error = true;
+        }
 
 
-            if (!error) {
-                //final Gerant gerant = Preference.getGerant(DetailsVehiculeActivity.this);
-                if (gerant != null) {
+        if (!error) {
+            //final Gerant gerant = Preference.getGerant(DetailsVehiculeActivity.this);
+            if (gerant != null) {
 
-                    //check network available or not
-                    if (Network.isNetworkAvailable(DetailsVehiculeActivity.this)) {
+                //check network available or not
+                if (Network.isNetworkAvailable(DetailsVehiculeActivity.this)) {
 
-                        // Instantiate the RequestQueue.
-                        RequestQueue queue = Volley.newRequestQueue(DetailsVehiculeActivity.this);
+                    // Instantiate the RequestQueue.
+                    RequestQueue queue = Volley.newRequestQueue(DetailsVehiculeActivity.this);
 
-                        String url = String.format(Constant.URL_UPDATE_VEHICULE, gerant.session);
+                    String url = String.format(Constant.URL_UPDATE_VEHICULE, gerant.session);
 
-                        // Request a string response from the provided URL.
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    //json = parametre de reponse
-                                    public void onResponse(String json) {
-                                        Gson gson = new Gson();
-                                        StatusRest status = gson.fromJson(json, StatusRest.class);
-                                        if (status.status) {
-
-                                        }
-
-                                        Toast.makeText(DetailsVehiculeActivity.this, status.message, Toast.LENGTH_SHORT).show();
-
+                    // Request a string response from the provided URL.
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                            new Response.Listener<String>() {
+                                @Override
+                                //json = parametre de reponse
+                                public void onResponse(String json) {
+                                    Gson gson = new Gson();
+                                    StatusRest status = gson.fromJson(json, StatusRest.class);
+                                    if (status.status) {
+                                        setResult(RESULT_OK);
+                                        onBackPressed();
                                     }
 
-                                }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(DetailsVehiculeActivity.this, status.message, Toast.LENGTH_SHORT).show();
 
-                                Toast.makeText(DetailsVehiculeActivity.this, R.string.client_erreur_update, Toast.LENGTH_SHORT).show();
+                                }
 
-                            }
-                        }) {
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put("id", String.valueOf(vehicule.id));
-                                params.put("modele", String.valueOf(modele_id));
-                                params.put("immatriculation", immatriculation);
-                                params.put("disponible", (disponible) ? "1" : "0");
-                                params.put("agence", String.valueOf(gerant.agence.id));
-                                //TODO AJOUTER L'ENVOIE DE PHOTOS
-                                return params;
-                            }
-                        };
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
 
-                        // Add the request to the RequestQueue.
-                        queue.add(stringRequest);
+                            Toast.makeText(DetailsVehiculeActivity.this, R.string.client_erreur_update, Toast.LENGTH_SHORT).show();
 
-                    }
-                } else {
-                    Toast.makeText(DetailsVehiculeActivity.this, R.string.client_error_insert, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DetailsVehiculeActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("id", String.valueOf(vehicule.id));
+                            params.put("modele", String.valueOf(modele_id));
+                            params.put("immatriculation", immatriculation);
+                            params.put("disponible", (disponible) ? "1" : "0");
+                            params.put("agence", String.valueOf(gerant.agence.id));
+                            //TODO AJOUTER L'ENVOIE DE PHOTOS
+                            return params;
+                        }
+                    };
+
+                    // Add the request to the RequestQueue.
+                    queue.add(stringRequest);
+
                 }
-
+            } else {
+                Toast.makeText(DetailsVehiculeActivity.this, R.string.client_error_insert, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(DetailsVehiculeActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
 
         }
 
     }
+
+}
 
