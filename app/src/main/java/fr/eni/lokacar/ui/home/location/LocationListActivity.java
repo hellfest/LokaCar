@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fr.eni.lokacar.AppActivity;
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.adpater.LocationAdapter;
 import fr.eni.lokacar.modele.Gerant;
@@ -39,7 +40,7 @@ import fr.eni.lokacar.utils.Constant;
 import fr.eni.lokacar.utils.Network;
 import fr.eni.lokacar.utils.Preference;
 
-public class LocationListActivity extends AppCompatActivity {
+public class LocationListActivity extends AppActivity {
     private ListView listViewLocation;
     private LocationAdapter adapter;
     private List<Location> listLocation;

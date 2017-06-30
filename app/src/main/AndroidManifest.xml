@@ -58,9 +58,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
 
             ></activity>
-            android:parentActivityName=".ui.home.HomeActivity" />
 
-        <activity android:name=".ui.home.location.LocationFormActivity" />
         <activity android:name=".ui.home.location.LocationListActivity"></activity>
     </application>
 
