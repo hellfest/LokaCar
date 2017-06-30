@@ -58,9 +58,16 @@ public class Constant {
     //--------------Request de liste des catégories-----------
     public static final String URL_LIST_LOCATION_VEHICULE = "http://10.1.139.21:8383/slim/vehicule/location/liste/%s/%s";
 
-
+    //--------------Request pour ajout d'une location-----------
     public static final String URL_LOCATION_INSERT = "http://10.1.139.21:8383/slim/location/insert/%s";
 
+    //--------------Request pour une location-----------
     public static final String URL_GET_LOCATION = "http://10.1.139.21:8383/slim/location/get/%s/%s";
+
+    //--------------Request de liste des locations-----------
+    public static final String URL_LOCATION_LISTE = "http://10.1.139.21:8383/slim/location/liste/%s";
+
+    public static final int DATE_MINIMUM = 1990;
+
 
 }

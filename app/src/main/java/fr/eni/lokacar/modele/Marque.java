@@ -26,4 +26,5 @@ public class Marque implements Serializable {
         return this.libelle.equals(marque.libelle);
 
     }
+
 }
